@@ -8,7 +8,6 @@
     "page_action": {
       "default_title": "EvaJS Inspector"
     },
-  
     "background": {
       "scripts": ["eva.background.js"]
     },
