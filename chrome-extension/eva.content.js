@@ -15,36 +15,54 @@ const globalHook = {
 
 document.addEventListener("DOMContentLoaded", function () {
   function injectedScript(window) {
-    let gameInstance = window.$eva;
-    let gameObjects = gameInstance.gameObjects;
-    let res = [];
-    for(let i = 0;i<gameObjects.length;i++){
-      let temp = {};
-      for(const key in gameObjects[i]){
-        if(typeof gameObjects[i][key] !=='object' && typeof gameObjects[i][key] !== 'function'){
-          temp[key] = gameObjects[i][key]
-        }
+    let objs = window.$eva;
+    function transformToNodes(objs) {
+      let root = {};
+      let nodes = [root];
+
+      for (let i = 0; i < objs.length; i++) {
+        let obj = objs[i];
+        let components = obj.components;
+        let fileredComponents = buildWhiteList(obj?.components);
+        let node = {
+          id: obj?.id,
+          name: obj?.name,
+          scene: obj?.scene?.id,
+          parent: obj?.parent?.id,
+          components: fileredComponents,
+        };
+        nodes.push(node);
       }
-      res.push(temp);
+      return nodes;
     }
 
-    console.log("game injected-script", res);
-  
-    window.postMessage({ game: res}, "*");
-    // let postBridge = window;
-    // postBridge.postMessage({"game":game}, "*");
+    function buildWhiteList(components) {
+      let res = [];
+      for (let i = 0; i < components.length; i++) {
+        if (!components[i].constructor.IDEProps) continue;
+        let temp = {};
+        let whiteList = [...components[i].constructor.IDEProps, "name"];
+        let component = components[i];
+        for (let j = 0; j < whiteList.length; j++) {
+          temp[whiteList[j]] = component[whiteList[j]];
+        }
+        res.push(temp);
+      }
+      return res;
+    }
+    let tree = transformToNodes(objs);
+    window.postMessage({ tree: tree }, "*");
   }
   const code = injectedScript.toString();
   globalHook.executeInContext(code);
 });
 
-
 window.addEventListener(
   "message",
   function (event) {
-    if (event.data.game) {
-      game = event.data.game;
-      console.log("game content-script", game);
+    if (event.data.tree) {
+      tree = event.data.tree;
+      console.log("tree content-script", tree);
     }
   },
   false
