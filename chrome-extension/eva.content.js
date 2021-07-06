@@ -22,14 +22,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
       for (let i = 0; i < objs.length; i++) {
         let obj = objs[i];
-        let components = obj.components;
-        let fileredComponents = buildWhiteList(obj?.components);
+        let filteredComponents = buildWhiteList(obj?.components);
         let node = {
           id: obj?.id,
           name: obj?.name,
           scene: obj?.scene?.id,
           parent: obj?.parent?.id,
-          components: fileredComponents,
+          components: filteredComponents,
         };
         nodes.push(node);
       }
