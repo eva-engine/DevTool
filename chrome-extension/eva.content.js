@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
       let root = {};
       let nodes = [root];
 
-      for (let i = 0; i < objs.length; i++) {
+      for (let i = 0; i < objs?.length; i++) {
         let obj = objs[i];
         let filteredComponents = buildWhiteList(obj?.components);
         let node = {
@@ -37,12 +37,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function buildWhiteList(components) {
       let res = [];
-      for (let i = 0; i < components.length; i++) {
+      for (let i = 0; i < components?.length; i++) {
         if (!components[i].constructor.IDEProps) continue;
         let temp = {};
         let whiteList = [...components[i].constructor.IDEProps, "name"];
         let component = components[i];
-        for (let j = 0; j < whiteList.length; j++) {
+        for (let j = 0; j < whiteList?.length; j++) {
           temp[whiteList[j]] = component[whiteList[j]];
         }
         res.push(temp);
@@ -55,14 +55,30 @@ document.addEventListener("DOMContentLoaded", function () {
   const code = injectedScript.toString();
   globalHook.executeInContext(code);
 });
-
 window.addEventListener(
   "message",
   function (event) {
     if (event.data.tree) {
-      tree = event.data.tree;
-      console.log("tree content-script", tree);
+      let tree = event.data.tree;
+      // console.log("content-script", tree);
+      chrome.runtime.sendMessage({sign: "EvaDevtool", tree: tree}, function(response) {
+        console.log(response.farewell);
+      });
     }
   },
   false
 );
+
+
+
+// chrome.runtime.onConnect.addListener(function(port) {
+// 	console.log(port);
+// 	if(port.name == 'test-connect') {
+// 		port.onMessage.addListener(function(msg) {
+// 			console.log('收到长连接消息：', msg);
+// 			if(msg.question == '你是谁啊？') port.postMessage({answer: '我是你爸！'});
+// 		});
+// 	}
+// });
+
+// 报错 接收端不存在
