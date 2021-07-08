@@ -12,7 +12,6 @@ chrome.devtools.panels.create(
 //   console.log("tabId", chrome.devtools.inspectedWindow.tabId);
 // });
 
-
 // function receiveMessage(event) {
 //   console.log("devtools msg: ", event);
 // }

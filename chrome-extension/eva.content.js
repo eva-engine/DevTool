@@ -29,10 +29,19 @@ document.addEventListener("DOMContentLoaded", function () {
           scene: obj?.scene?.id,
           parent: obj?.parent?.id,
           components: filteredComponents,
+          children: [],
         };
         nodes.push(node);
       }
-      return nodes;
+      if (nodes.length > 1) {
+        for (let i = nodes.length - 1; i > 1; i--) {
+          let parent = nodes[i].parent;
+          let parentNode = nodes[parent];
+          parentNode.children.splice(0, 0, nodes[i]);
+        }
+      }
+      // console.log(nodes[1]);
+      return nodes[1];
     }
 
     function buildWhiteList(components) {
@@ -61,15 +70,16 @@ window.addEventListener(
     if (event.data.tree) {
       let tree = event.data.tree;
       // console.log("content-script", tree);
-      chrome.runtime.sendMessage({sign: "EvaDevtool", tree: tree}, function(response) {
-        console.log(response.farewell);
-      });
+      chrome.runtime.sendMessage(
+        { sign: "EvaDevtool", tree: tree },
+        function (response) {
+          console.log(response.farewell);
+        }
+      );
     }
   },
   false
 );
-
-
 
 // chrome.runtime.onConnect.addListener(function(port) {
 // 	console.log(port);

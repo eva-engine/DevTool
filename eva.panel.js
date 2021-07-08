@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
       sender.tab ? "来自内容脚本：" + sender.tab.url : "来自扩展程序"
     );
     if (request.sign == "EvaDevtool") {
-      sendResponse({ farewell: "欢迎使用EvaDevtool" });
+      sendResponse({ farewell: "欢迎使用EvaDvetool" });
       console.log(request.tree);
       document.body.innerHTML = JSON.stringify(request.tree);
     }
