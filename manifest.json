@@ -1,23 +1,24 @@
 {
-    "manifest_version": 2,
-    "version": "0.0.1",
-    "name": "Eva.js devtools",
-    "description": "Developer Tools for inspecting and debugging games written with Eva.js",
-    "permissions": ["<all_urls>"],
-    "devtools_page": "./chrome-extension/eva.devtools.html",
-    "page_action": {
-      "default_title": "EvaJS Inspector"
-    },
-    "background": {
-      "scripts": ["eva.background.js"]
-    },
-    "content_scripts": [
-        {
-          "matches": ["<all_urls>"],
-          "js": ["./chrome-extension/eva.content.js"],
-          "all_frames": true,
-          "run_at": "document_start"
-        }
-      ]
-  }
-  
+  "manifest_version": 2,
+  "version": "0.0.1",
+  "name": "Eva.js devtools",
+  "description": "Developer Tools for inspecting and debugging games written with Eva.js",
+  "permissions": ["<all_urls>"],
+  "devtools_page": "./chrome-extension/eva.devtools.html",
+  "page_action": {
+    "default_title": "EvaJS Inspector"
+  },
+  "background": {
+    "scripts": ["eva.background.js"]
+  },
+  "content_security_policy": 
+  "script-src 'self' https://unpkg.com/react@16/umd/react.development.js https://unpkg.com/react-dom@16/umd/react-dom.development.js; object-src 'self'",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["./chrome-extension/eva.content.js"],
+      "all_frames": true,
+      "run_at": "document_start"
+    }
+  ]
+}

@@ -18,30 +18,43 @@ document.addEventListener("DOMContentLoaded", function () {
     let objs = window.$eva;
     function transformToNodes(objs) {
       let root = {};
+      let outlinerNode = {
+        parent: 0,
+        children:[],
+        id:null
+      }
       let nodes = [root];
+      let outliner = [outlinerNode];
 
       for (let i = 0; i < objs?.length; i++) {
         let obj = objs[i];
         let filteredComponents = buildWhiteList(obj?.components);
-        let node = {
+        let componentsInfo = {
           id: obj?.id,
-          name: obj?.name,
+          components: filteredComponents,
+        };
+        let newOutliner = {
+          id:obj?.id,
+          name:obj?.name,
           scene: obj?.scene?.id,
           parent: obj?.parent?.id,
-          components: filteredComponents,
-          children: [],
-        };
-        nodes.push(node);
+          children: []
+        }
+        nodes.push(componentsInfo);
+        outliner.push(newOutliner);
       }
-      if (nodes.length > 1) {
-        for (let i = nodes.length - 1; i > 1; i--) {
-          let parent = nodes[i].parent;
-          let parentNode = nodes[parent];
-          parentNode.children.splice(0, 0, nodes[i]);
+      if (outliner.length > 1) {
+        for (let i = outliner.length - 1; i > 1; i--) {
+          let parent = outliner[i].parent;
+          let parentNode = outliner[parent];
+          parentNode.children.splice(0, 0, outliner[i]);
         }
       }
       // console.log(nodes[1]);
-      return nodes[1];
+      return {
+        nodes: nodes,
+        outliner: outliner[1]
+      };
     }
 
     function buildWhiteList(components) {
@@ -58,8 +71,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       return res;
     }
-    let tree = transformToNodes(objs);
-    window.postMessage({ tree: tree }, "*");
+    let result = transformToNodes(objs);
+    console.log(result)
+    window.postMessage({ result: result }, "*");
   }
   const code = injectedScript.toString();
   globalHook.executeInContext(code);
@@ -67,11 +81,11 @@ document.addEventListener("DOMContentLoaded", function () {
 window.addEventListener(
   "message",
   function (event) {
-    if (event.data.tree) {
-      let tree = event.data.tree;
+    if (event.data.result) {
+      let result = event.data.result;
       // console.log("content-script", tree);
       chrome.runtime.sendMessage(
-        { sign: "EvaDevtool", tree: tree },
+        { sign: "EvaDevtool", tree: result },
         function (response) {
           console.log(response.farewell);
         }
