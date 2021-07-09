@@ -11,8 +11,7 @@
   "background": {
     "scripts": ["eva.background.js"]
   },
-  "content_security_policy": 
-  "script-src 'self' https://unpkg.com/react@16/umd/react.development.js https://unpkg.com/react-dom@16/umd/react-dom.development.js; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://unpkg.com/react@16/umd/react.development.js https://unpkg.com/react-dom@16/umd/react-dom.development.js; object-src 'self'",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

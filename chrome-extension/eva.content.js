@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
           id:obj?.id,
           name:obj?.name,
           scene: obj?.scene?.id,
-          parent: obj?.parent?.id,
+          parent: obj?.parent?.id?obj.parent.id: 0,
           children: []
         }
         nodes.push(componentsInfo);
