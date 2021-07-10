@@ -20,9 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
       let root = {};
       let outlinerNode = {
         parent: 0,
-        children:[],
-        id:null
-      }
+        children: [],
+        id: null,
+      };
       let nodes = [root];
       let outliner = [outlinerNode];
 
@@ -34,12 +34,12 @@ document.addEventListener("DOMContentLoaded", function () {
           components: filteredComponents,
         };
         let newOutliner = {
-          id:obj?.id,
-          name:obj?.name,
+          id: obj?.id,
+          title: obj?.name,
           scene: obj?.scene?.id,
-          parent: obj?.parent?.id?obj.parent.id: 0,
-          children: []
-        }
+          parent: obj?.parent?.id ? obj.parent.id : 0,
+          children: [],
+        };
         nodes.push(componentsInfo);
         outliner.push(newOutliner);
       }
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // console.log(nodes[1]);
       return {
         nodes: nodes,
-        outliner: outliner[1]
+        outliner: outliner[1],
       };
     }
 
@@ -64,15 +64,29 @@ document.addEventListener("DOMContentLoaded", function () {
         let temp = {};
         let whiteList = [...components[i].constructor.IDEProps, "name"];
         let component = components[i];
-        for (let j = 0; j < whiteList?.length; j++) {
-          temp[whiteList[j]] = component[whiteList[j]];
-        }
-        res.push(temp);
+        let objForReact = copyObjForReact(component, whiteList);
+        res.push(objForReact);
       }
       return res;
     }
+    function copyObjForReact(originObj, whitelist) {
+      let temp = {};
+      for (let i = 0; i < whitelist.length; i++) {
+        if (typeof originObj[whitelist[i]] === "object") {
+          let obj = originObj[whitelist[i]];
+          let secondKeys = Object.keys(obj);
+          for (let j = 0; j < secondKeys.length; j++) {
+            let newKey = whitelist[i] + "." + secondKeys[j];
+            temp[newKey] = obj[secondKeys[j]];
+          }
+        } else {
+          temp[whitelist[i]] = originObj[whitelist[i]];
+        }
+      }
+      return temp;
+    }
     let result = transformToNodes(objs);
-    console.log(result)
+    console.log(result.nodes[1].components[0]);
     window.postMessage({ result: result }, "*");
   }
   const code = injectedScript.toString();
