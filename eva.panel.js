@@ -51,6 +51,34 @@ document.addEventListener("DOMContentLoaded", function () {
       function Table(props) {
         var arr = Object.keys(props.obj);
         var obj = props.obj;
+
+        const [value, setValue] = React.useState();
+
+        function useDebounce(fn, delay, dep = []) {
+          const { current } = React.useRef({ fn, timer: null });
+          React.useEffect(
+            function () {
+              current.fn = fn;
+            },
+            [fn]
+          );
+
+          return React.useCallback(function f(...args) {
+            if (current.timer) {
+              clearTimeout(current.timer);
+            }
+            current.timer = setTimeout(() => {
+              current.fn.call(this, ...args);
+            }, delay);
+          }, dep);
+        }
+        const handleChange = useDebounce(function (e) {
+          setValue(e.target.value);
+        }, 300);
+
+        const handleBlur = function () {
+          // alert(value);
+        };
         return React.createElement(
           "table",
           null,
@@ -60,14 +88,32 @@ document.addEventListener("DOMContentLoaded", function () {
             arr.map(function (key) {
               return React.createElement(
                 "tr",
-                null,
-                React.createElement("td", null, `${key}:`),
-                React.createElement("td", null, obj[key])
+                { key: key },
+                React.createElement(
+                  "td",
+                  {
+                    key: key + "key",
+                    className: "key",
+                  },
+                  "".concat(key)
+                ),
+                React.createElement("td", { key: key + ":" }, ":"),
+                React.createElement(
+                  "td",
+                  { key: key + "input" },
+                  React.createElement("input", {
+                    placeholder: "".concat(obj[key]),
+                    onChange: handleChange,
+                    onBlur: handleBlur,
+                  })
+                )
               );
             })
           )
         );
       }
+
+      // babel编译后的react Table
 
       const domContainer = document.querySelector("#Table");
       let obj = [
