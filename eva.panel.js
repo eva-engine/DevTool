@@ -53,9 +53,11 @@ document.addEventListener("DOMContentLoaded", function () {
         var obj = props.obj;
 
         const [value, setValue] = React.useState();
+        const [key, setKey] = React.useState();
 
         function useDebounce(fn, delay, dep = []) {
           const { current } = React.useRef({ fn, timer: null });
+
           React.useEffect(
             function () {
               current.fn = fn;
@@ -63,21 +65,24 @@ document.addEventListener("DOMContentLoaded", function () {
             [fn]
           );
 
-          return React.useCallback(function f(...args) {
+          return React.useCallback(function f(e) {
+            e.persist();
             if (current.timer) {
               clearTimeout(current.timer);
             }
+
             current.timer = setTimeout(() => {
-              current.fn.call(this, ...args);
+              current.fn.call(this, e);
             }, delay);
           }, dep);
         }
         const handleChange = useDebounce(function (e) {
           setValue(e.target.value);
+          setKey(e.target.className);
         }, 300);
 
         const handleBlur = function () {
-          // alert(value);
+          console.log(key, value);
         };
         return React.createElement(
           "table",
@@ -103,8 +108,11 @@ document.addEventListener("DOMContentLoaded", function () {
                   { key: key + "input" },
                   React.createElement("input", {
                     placeholder: "".concat(obj[key]),
-                    onChange: handleChange,
+                    onChange: function onChange(e) {
+                      return handleChange(e);
+                    },
                     onBlur: handleBlur,
+                    className: key,
                   })
                 )
               );
