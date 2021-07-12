@@ -87,6 +87,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let result = transformToNodes(objs);
     console.log(result);
     window.postMessage({ result: result }, "*");
+    window.addEventListener('message',function(event){
+      if(event.data.key){
+        console.log('inject', `${event.data.key}: ${event.data.value}`);
+      }
+    })
   }
   const code = injectedScript.toString();
   globalHook.executeInContext(code);
@@ -110,7 +115,10 @@ window.addEventListener(
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // console.log(sender.tab ?"from a content script:" + sender.tab.url :"from the extension");
-  if (request.cmd == "test") alert(`${request.key}: ${request.value}`);
+  if (request.cmd == "test"){
+    alert(`${request.key}: ${request.value}`);
+    window.postMessage({key: request.key, value: request.value});
+  }
   sendResponse("我收到了你的消息！");
 });
 
