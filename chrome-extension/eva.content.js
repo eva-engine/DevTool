@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", function () {
       let res = [];
       for (let i = 0; i < components?.length; i++) {
         if (!components[i].constructor.IDEProps) continue;
-        let temp = {};
         let whiteList = [...components[i].constructor.IDEProps, "name"];
         let component = components[i];
         let objForReact = copyObjForReact(component, whiteList);
@@ -86,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return temp;
     }
     let result = transformToNodes(objs);
-    console.log(result.nodes[1].components[0]);
+    console.log(result);
     window.postMessage({ result: result }, "*");
   }
   const code = injectedScript.toString();
@@ -108,6 +107,12 @@ window.addEventListener(
   },
   false
 );
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  // console.log(sender.tab ?"from a content script:" + sender.tab.url :"from the extension");
+  if (request.cmd == "test") alert(`${request.key}: ${request.value}`);
+  sendResponse("我收到了你的消息！");
+});
 
 // chrome.runtime.onConnect.addListener(function(port) {
 // 	console.log(port);
