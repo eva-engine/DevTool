@@ -85,13 +85,28 @@ document.addEventListener("DOMContentLoaded", function () {
       return temp;
     }
     let result = transformToNodes(objs);
-    console.log(result);
+    // console.log(result);
     window.postMessage({ result: result }, "*");
-    window.addEventListener('message',function(event){
-      if(event.data.key){
-        console.log('inject', `${event.data.key}: ${event.data.value}`);
+    window.addEventListener("message", function (event) {
+      let eventKey = event.data.key;
+      if (eventKey) {
+        console.log("inject", `${eventKey}: ${event.data.value}`);
+        let keys = eventKey.split("-");
+        const objId = keys[0]-1;
+        const componentId = keys[1];
+        const componentKey = keys[2];
+        if (componentKey.indexOf(".")) {
+          let firstAndSecondKey = componentKey.split(".");
+          const firstKey = firstAndSecondKey[0];
+          const secondKey = firstAndSecondKey[1];
+          window.$eva[objId].components[componentId][firstKey][secondKey] =
+            event.data.value;
+        } else {
+          window.$eva[objId].components[componentId][componentKey] =
+            event.data.value;
+        }
       }
-    })
+    });
   }
   const code = injectedScript.toString();
   globalHook.executeInContext(code);
@@ -115,9 +130,9 @@ window.addEventListener(
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // console.log(sender.tab ?"from a content script:" + sender.tab.url :"from the extension");
-  if (request.cmd == "test"){
-    alert(`${request.key}: ${request.value}`);
-    window.postMessage({key: request.key, value: request.value});
+  if (request.cmd == "test") {
+    // alert(`${request.key}: ${request.value}`);
+    window.postMessage({ key: request.key, value: request.value });
   }
   sendResponse("我收到了你的消息！");
 });

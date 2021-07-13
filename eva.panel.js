@@ -41,9 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
       // }
       function Tables(props) {
         var arr = props.arr;
-        return arr.map(function (item) {
+        let objId = props.objId;
+        return arr.map(function (item,index) {
           return React.createElement(Table, {
             obj: item,
+            component: index,
+            objId: objId
           });
         });
       }
@@ -51,6 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
       function Table(props) {
         var arr = Object.keys(props.obj);
         var obj = props.obj;
+        const objId = props.objId;
+        const componentId = props.component;
 
         const [value, setValue] = React.useState();
         const [key, setKey] = React.useState();
@@ -98,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
             );
           }
           sendMessageToContentScript(
-            { cmd: "test", key:key,value: value },
+            { cmd: "test", key: key, value: value },
             function (response) {
               console.log("来自content的回复：" + response);
             }
@@ -132,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       return handleChange(e);
                     },
                     onBlur: handleBlur,
-                    className: key,
+                    className: `${objId}-${componentId}-${key}`,
                   })
                 )
               );
@@ -165,8 +170,9 @@ document.addEventListener("DOMContentLoaded", function () {
           elem: "#tree", //绑定元素
           data: [outliner],
           click: function (obj) {
+            let id = obj.data.id;
             ReactDOM.render(
-              e(Tables, { arr: nodes[obj.data.id].components }),
+              e(Tables, { arr: nodes[id].components, objId: id }),
               domContainer
             );
 
