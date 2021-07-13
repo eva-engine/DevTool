@@ -42,11 +42,11 @@ document.addEventListener("DOMContentLoaded", function () {
       function Tables(props) {
         var arr = props.arr;
         let objId = props.objId;
-        return arr.map(function (item,index) {
+        return arr.map(function (item, index) {
           return React.createElement(Table, {
             obj: item,
             component: index,
-            objId: objId
+            objId: objId,
           });
         });
       }
@@ -87,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 300);
 
         const handleBlur = function () {
-          console.log(key, value);
           function sendMessageToContentScript(message, callback) {
             chrome.tabs.query(
               { active: true, currentWindow: true },
@@ -102,12 +101,14 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             );
           }
-          sendMessageToContentScript(
-            { cmd: "test", key: key, value: value },
-            function (response) {
-              console.log("来自content的回复：" + response);
-            }
-          );
+          if(value){
+            sendMessageToContentScript(
+              { cmd: "test", key: key, value: value },
+              function (response) {
+                console.log("来自content的回复：" + response);
+              }
+            );
+          }
         };
         return React.createElement(
           "table",
@@ -116,27 +117,36 @@ document.addEventListener("DOMContentLoaded", function () {
             "thead",
             null,
             arr.map(function (key) {
+              let uid = `${objId}-${componentId}-${key}`;
               return React.createElement(
                 "tr",
-                { key: key },
+                { key: `${uid}`},
                 React.createElement(
                   "td",
                   {
-                    key: key + "key",
+                    key: `${uid}-key`,
                     className: "key",
                   },
                   "".concat(key)
                 ),
-                React.createElement("td", { key: key + ":" }, ":"),
+                React.createElement("td", { key: `${uid}-:` }, ":"),
                 React.createElement(
                   "td",
-                  { key: key + "input" },
+                  { key: `${uid}-input` },
                   React.createElement("input", {
                     placeholder: "".concat(obj[key]),
                     onChange: function onChange(e) {
                       return handleChange(e);
                     },
-                    onBlur: handleBlur,
+                    onFocus: function onFocus(e) {
+                      e.target.placeholder = "";
+                    },
+                    onBlur: function onBlur(e) {
+                      handleBlur();
+                      if (!e.target.value) {
+                        e.target.placeholder = obj[key];
+                      }
+                    },
                     className: `${objId}-${componentId}-${key}`,
                   })
                 )

@@ -6,8 +6,8 @@ table {
   height: 100%;
   border: 1px solid #000;
 }
-input {
-  border: none;
+input{
+    border: none;
 }
 ::placeholder {
   color: #000;
