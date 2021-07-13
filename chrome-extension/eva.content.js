@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let result = transformToNodes(objs);
     // console.log(result);
     window.postMessage({ result: result }, "*");
+    // setInterval(()=>{window.postMessage({ result: result }, "*")},1000)
     window.addEventListener("message", function (event) {
       let eventKey = event.data.key;
       if (eventKey) {

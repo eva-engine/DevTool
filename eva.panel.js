@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             );
           }
-          if(value){
+          if (value) {
             sendMessageToContentScript(
               { cmd: "test", key: key, value: value },
               function (response) {
@@ -109,6 +109,8 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             );
           }
+          setKey(undefined);
+          setValue(undefined);
         };
         return React.createElement(
           "table",
@@ -120,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
               let uid = `${objId}-${componentId}-${key}`;
               return React.createElement(
                 "tr",
-                { key: `${uid}`},
+                { key: `${uid}` },
                 React.createElement(
                   "td",
                   {
@@ -142,9 +144,11 @@ document.addEventListener("DOMContentLoaded", function () {
                       e.target.placeholder = "";
                     },
                     onBlur: function onBlur(e) {
-                      handleBlur();
+                      handleBlur(e, key);
                       if (!e.target.value) {
                         e.target.placeholder = obj[key];
+                      } else {
+                        obj[key] = e.target.value;
                       }
                     },
                     className: `${objId}-${componentId}-${key}`,
