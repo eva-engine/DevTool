@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (eventKey) {
         console.log("inject", `${eventKey}: ${event.data.value}`);
         let keys = eventKey.split("-");
-        const objId = keys[0]-1;
+        const objId = keys[0] - 1;
         const componentId = keys[1];
         const componentKey = keys[2];
         if (componentKey.indexOf(".")) {
