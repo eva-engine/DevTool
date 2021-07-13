@@ -85,13 +85,25 @@ document.addEventListener("DOMContentLoaded", function () {
       return temp;
     }
     let result = transformToNodes(objs);
-    // console.log(result);
+    console.log("result", result);
     window.postMessage({ result: result }, "*");
-    // setInterval(()=>{window.postMessage({ result: result }, "*")},1000)
+    setInterval(() => {
+      let currentEva = window.$eva;
+      let currentInfo = transformToNodes(currentEva);
+      let nodes = currentInfo.nodes;
+      window.postMessage(
+        {
+          nodes: nodes,
+        },
+        "*"
+      );
+    }, 1000);
     window.addEventListener("message", function (event) {
+      // 接受panel.js 借用content.js发送的编辑值，修改页面实例对象的值
       let eventKey = event.data.key;
+      const eventValue = event.data.value;
       if (eventKey) {
-        console.log("inject", `${eventKey}: ${event.data.value}`);
+        // console.log("inject", `${eventKey}: ${event.data.value}`);
         let keys = eventKey.split("-");
         const objId = keys[0] - 1;
         const componentId = keys[1];
@@ -101,10 +113,9 @@ document.addEventListener("DOMContentLoaded", function () {
           const firstKey = firstAndSecondKey[0];
           const secondKey = firstAndSecondKey[1];
           window.$eva[objId].components[componentId][firstKey][secondKey] =
-            event.data.value;
+            eventValue;
         } else {
-          window.$eva[objId].components[componentId][componentKey] =
-            event.data.value;
+          window.$eva[objId].components[componentId][componentKey] = eventValue;
         }
       }
     });
@@ -125,10 +136,18 @@ window.addEventListener(
         }
       );
     }
+    if(event.data.nodes){
+      let nodes = event.data.nodes;
+      chrome.runtime.sendMessage(
+        { sign: "Nodes", nodes: nodes },
+        function (response) {
+          console.log(response.farewell);
+        }
+      );
+    }
   },
   false
 );
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // console.log(sender.tab ?"from a content script:" + sender.tab.url :"from the extension");
   if (request.cmd == "test") {

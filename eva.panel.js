@@ -14,31 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ("use strict");
 
       const e = React.createElement;
-      // function App() {
-      // //   function toList(obj) {
-      // //     var items = Object.keys(obj).map(function (key) {
-      // //       // if(obj.hasOwnProperty(key)){
-      // //       var value = obj[key];
 
-      // //       if (Array.isArray(value)) {
-      // //         return value.map(function (obj) {
-      // //           return toList(obj);
-      // //         });
-      // //       }
-
-      // //       if (key === "title" || key === "id") {
-      // //         return React.createElement(
-      // //           "li",
-      // //           null,
-      // //           "".concat(key, ": ").concat(obj[key])
-      // //         );
-      // //       }
-      // //     });
-      // //     return React.createElement("ul", null, items);
-      // //   }
-
-      //   return React.createElement("div", null, toList(outliner));
-      // }
       function Tables(props) {
         var arr = props.arr;
         let objId = props.objId;
@@ -194,26 +170,6 @@ document.addEventListener("DOMContentLoaded", function () {
           },
         });
       });
-
-      // layui.use(["table", "util"], function () {
-      //   var table = layui.table,
-      //     util = layui.util;
-
-      //   //监听单元格编辑
-      //   table.on("edit(test3)", function (obj) {
-      //     var value = obj.value, //得到修改后的值
-      //       data = obj.data, //得到所在行所有键值
-      //       field = obj.field; //得到字段
-      //     layer.msg(
-      //       "[ID: " +
-      //         data.id +
-      //         "] " +
-      //         field +
-      //         " 字段更改值为：" +
-      //         util.escape(value)
-      //     );
-      //   });
-      // });
     }
   });
 });
