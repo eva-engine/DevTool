@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import "./searchTree.css";
+import "./index.css";
 import { Tree, Input } from "antd";
 
 const { Search } = Input;

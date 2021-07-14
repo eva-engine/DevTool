@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { Row, Col } from "antd";
 import "antd/dist/antd.css";
 // import "./index.css";
-import SearchTree from "./SearchTree";
-import Tables from "./Tables";
+import SearchTree from "./Components/SearchTree/index";
+import Tables from "./Components/Tables/index";
 
 class Demo extends React.Component {
   state = {

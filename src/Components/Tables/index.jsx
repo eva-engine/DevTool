@@ -1,4 +1,4 @@
-import "./table.css";
+import "./index.css";
 import React, { useState, useRef, useCallback, useEffect } from "react";
 export default function Tables(props) {
   let arr = props.arr;
