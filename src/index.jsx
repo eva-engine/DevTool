@@ -6,21 +6,21 @@ import "antd/dist/antd.css";
 import SearchTree from "./Components/SearchTree/index";
 import Tables from "./Components/Tables/index";
 
-class Demo extends React.Component {
+class App extends React.Component {
   state = {
     value: undefined,
     obj: [
       {
         "position.x": "0",
         "position.y": "0",
-        name: "Transform"
+        name: "Transform",
       },
       {
         "position.x": "0",
         "position.y": "0",
-        name: "ninePatch"
-      }
-    ]
+        name: "ninePatch",
+      },
+    ],
   };
 
   onChange = (value) => {
@@ -45,4 +45,4 @@ class Demo extends React.Component {
   }
 }
 
-ReactDOM.render(<Demo />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));

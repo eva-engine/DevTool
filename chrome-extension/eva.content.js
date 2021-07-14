@@ -132,7 +132,7 @@ window.addEventListener(
       chrome.runtime.sendMessage(
         { sign: "EvaDevtool", tree: result },
         function (response) {
-          console.log(response.farewell);
+          // console.log(response.farewell);
         }
       );
     }
@@ -141,7 +141,7 @@ window.addEventListener(
       chrome.runtime.sendMessage(
         { sign: "Nodes", nodes: nodes },
         function (response) {
-          console.log(response.farewell);
+          // console.log(response.farewell);
         }
       );
     }

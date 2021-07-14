@@ -16,6 +16,7 @@ module.exports = {
       colors: true,
     },
     hot: true,
+    writeToDisk: true
   },
   entry: ["./src/index.jsx", "./src/dev.js"],
   // 将 jsx 添加到默认扩展名中，省略 jsx
