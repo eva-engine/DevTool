@@ -50,8 +50,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: "chrome-extension/eva.panel.html",
-      filename: "eva.panel.html",
+      template: "src/index.html",
+      filename: "index.html",
       inject: true,
     }),
     new webpack.HotModuleReplacementPlugin(),

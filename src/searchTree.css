@@ -1,0 +1,18 @@
+.site-tree-search-value {
+  color: #f50;
+}
+[data-theme="dark"] .site-tree-search-value {
+  color: #d84a1b;
+}
+.ant-tree-list-holder-inner {
+  background-color: #333;
+}
+.ant-tree-title {
+  color: #fff;
+}
+.ant-tree-switcher {
+  color: #fff;
+}
+ant-input{
+  max-width: 1000px;
+}
