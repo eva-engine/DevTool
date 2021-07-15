@@ -6725,29 +6725,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./index.css */ "./src/Components/SearchTree/index.css");
 /* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/input/index.js");
 /* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/tree/index.js");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -6759,27 +6747,10 @@ var gData = [{
   title: "first",
   children: [{
     key: "0-1-1",
-    title: "f-s",
-    children: [{
-      key: "0-1-1-1",
-      title: "f-s"
-    }, {
-      key: "0-1-2-1",
-      title: "f-t"
-    }]
+    title: "f-s"
   }, {
     key: "0-1-2",
     title: "f-t"
-  }]
-}, {
-  key: "1-1",
-  title: "second",
-  children: [{
-    key: "1-1-1",
-    title: "s-s"
-  }, {
-    key: "1-1-2",
-    title: "s-t"
   }]
 }];
 var dataList = [];
@@ -6821,121 +6792,95 @@ var getParentKey = function getParentKey(key, tree) {
   return parentKey;
 };
 
-var SearchTree = /*#__PURE__*/function (_React$Component) {
-  _inherits(SearchTree, _React$Component);
+function SearchTree() {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      expandedKeys = _useState2[0],
+      setExpandedKeys = _useState2[1];
 
-  var _super = _createSuper(SearchTree);
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+      _useState4 = _slicedToArray(_useState3, 2),
+      searchValue = _useState4[0],
+      setSearchValue = _useState4[1];
 
-  function SearchTree() {
-    var _this;
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
+      _useState6 = _slicedToArray(_useState5, 2),
+      autoExpandParent = _useState6[0],
+      setAutoExpandParent = _useState6[1];
 
-    _classCallCheck(this, SearchTree);
+  var onExpand = function onExpand(expandedKeys) {
+    setExpandedKeys(expandedKeys);
+    setAutoExpandParent(false);
+    console.log("gData", gData);
+    console.log("dataList", dataList);
+  };
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+  var onChange = function onChange(e) {
+    var value = e.target.value;
+    var expandedKeys = dataList.map(function (item) {
+      if (item.title.indexOf(value) > -1) {
+        return getParentKey(item.key, gData);
+      }
 
-    _this = _super.call.apply(_super, [this].concat(args));
-
-    _defineProperty(_assertThisInitialized(_this), "state", {
-      expandedKeys: [],
-      searchValue: "",
-      autoExpandParent: true
+      return null;
+    }).filter(function (item, i, self) {
+      return item && self.indexOf(item) === i;
     });
+    setExpandedKeys(expandedKeys);
+    setSearchValue(value);
+    setAutoExpandParent(true);
+  };
 
-    _defineProperty(_assertThisInitialized(_this), "onExpand", function (expandedKeys) {
-      _this.setState({
-        expandedKeys: expandedKeys,
-        autoExpandParent: false
-      });
-    });
+  var loop = function loop(data) {
+    return data.map(function (item) {
+      var index = item.title.indexOf(searchValue);
+      var beforeStr = item.title.substr(0, index);
+      var afterStr = item.title.substr(index + searchValue.length);
+      var title = index > -1 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, beforeStr, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+        className: "site-tree-search-value"
+      }, searchValue), afterStr) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, item.title);
 
-    _defineProperty(_assertThisInitialized(_this), "onChange", function (e) {
-      var value = e.target.value;
-      var expandedKeys = dataList.map(function (item) {
-        if (item.title.indexOf(value) > -1) {
-          return getParentKey(item.key, gData);
-        }
+      if (item.children) {
+        return {
+          title: title,
+          key: item.key,
+          children: loop(item.children)
+        };
+      }
 
-        return null;
-      }).filter(function (item, i, self) {
-        return item && self.indexOf(item) === i;
-      });
-
-      _this.setState({
-        expandedKeys: expandedKeys,
-        searchValue: value,
-        autoExpandParent: true
-      });
-    });
-
-    return _this;
-  }
-
-  _createClass(SearchTree, [{
-    key: "render",
-    value: function render() {
-      var _this$state = this.state,
-          searchValue = _this$state.searchValue,
-          expandedKeys = _this$state.expandedKeys,
-          autoExpandParent = _this$state.autoExpandParent;
-
-      var loop = function loop(data) {
-        return data.map(function (item) {
-          var index = item.title.indexOf(searchValue);
-          var beforeStr = item.title.substr(0, index);
-          var afterStr = item.title.substr(index + searchValue.length);
-          var title = index > -1 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, beforeStr, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
-            className: "site-tree-search-value"
-          }, searchValue), afterStr) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, item.title);
-
-          if (item.children) {
-            return {
-              title: title,
-              key: item.key,
-              children: loop(item.children)
-            };
-          }
-
-          return {
-            title: title,
-            key: item.key
-          };
-        });
+      return {
+        title: title,
+        key: item.key
       };
+    });
+  };
 
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Search, {
-        style: {
-          marginBottom: 8
-        },
-        placeholder: "Search",
-        onChange: this.onChange
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_4__.default, {
-        onExpand: this.onExpand,
-        expandedKeys: expandedKeys,
-        autoExpandParent: autoExpandParent,
-        treeData: loop(gData)
-      }));
-    }
-  }]);
-
-  return SearchTree;
-}(react__WEBPACK_IMPORTED_MODULE_0__.Component);
-
-
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Search, {
+    style: {
+      marginBottom: 8
+    },
+    placeholder: "Search",
+    onChange: onChange
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_4__.default, {
+    onExpand: onExpand,
+    expandedKeys: expandedKeys,
+    autoExpandParent: autoExpandParent,
+    treeData: loop(gData)
+  }));
+}
 
 /***/ }),
 
-/***/ "./src/Components/Tables/index.jsx":
+/***/ "./src/Components/Tables/Table.jsx":
 /*!*****************************************!*\
-  !*** ./src/Components/Tables/index.jsx ***!
+  !*** ./src/Components/Tables/Table.jsx ***!
   \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Tables)
+/* harmony export */   "default": () => (/* binding */ Table)
 /* harmony export */ });
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./src/Components/Tables/index.css");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
@@ -6952,19 +6897,6 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-
-function Tables(props) {
-  var arr = props.arr;
-  var objId = props.objId;
-  console.log(arr);
-  return arr.map(function (item, index) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(Table, {
-      obj: item,
-      component: index,
-      objId: objId
-    });
-  });
-}
 
 function Table(props) {
   var arr = Object.keys(props.obj);
@@ -7021,6 +6953,48 @@ function Table(props) {
       className: "".concat(key, "-").concat(objId, "-").concat(component)
     })));
   })));
+}
+
+/***/ }),
+
+/***/ "./src/Components/Tables/index.jsx":
+/*!*****************************************!*\
+  !*** ./src/Components/Tables/index.jsx ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Tables)
+/* harmony export */ });
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./src/Components/Tables/index.css");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _Table__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Table */ "./src/Components/Tables/Table.jsx");
+
+
+
+function Tables(props) {
+  var arr = props.arr;
+  var objId = props.objId;
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+      console.log(sender.tab ? "来自内容脚本：" + sender.tab.url : "来自扩展程序");
+
+      if (request.sign == "EvaDevtool") {
+        sendResponse({
+          farewell: "欢迎使用EvaDvetool"
+        });
+      }
+    });
+  }, []);
+  return arr.map(function (item, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_Table__WEBPACK_IMPORTED_MODULE_2__.default, {
+      obj: item,
+      component: index,
+      objId: objId
+    });
+  });
 }
 
 /***/ }),
@@ -9476,7 +9450,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626270605943
+      // 1626330487327
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -9496,7 +9470,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626271144699
+      // 1626330516403
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -9516,7 +9490,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626270605947
+      // 1626330487301
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -55842,14 +55816,14 @@ module.exports = /*#__PURE__*/function (_BaseClient) {
 
 /***/ }),
 
-/***/ "./node_modules/webpack-dev-server/client/index.js?http://127.0.0.1:3000":
+/***/ "./node_modules/webpack-dev-server/client/index.js?http://localhost:8080":
 /*!*******************************************************************************!*\
-  !*** ./node_modules/webpack-dev-server/client/index.js?http://127.0.0.1:3000 ***!
+  !*** ./node_modules/webpack-dev-server/client/index.js?http://localhost:8080 ***!
   \*******************************************************************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-var __resourceQuery = "?http://127.0.0.1:3000";
+var __resourceQuery = "?http://localhost:8080";
 
 /* global __resourceQuery WorkerGlobalScope self */
 
@@ -56833,7 +56807,7 @@ webpackContext.id = "./node_modules/webpack/hot sync ^\\.\\/log$";
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("cfab4158c92a459313f6")
+/******/ 		__webpack_require__.h = () => ("3776e04d965462efe276")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
@@ -57916,7 +57890,7 @@ webpackContext.id = "./node_modules/webpack/hot sync ^\\.\\/log$";
 /******/ 	// Load entry module and return exports
 /******/ 	__webpack_require__("./src/index.jsx");
 /******/ 	__webpack_require__("./src/dev.js");
-/******/ 	__webpack_require__("./node_modules/webpack-dev-server/client/index.js?http://127.0.0.1:3000");
+/******/ 	__webpack_require__("./node_modules/webpack-dev-server/client/index.js?http://localhost:8080");
 /******/ 	var __webpack_exports__ = __webpack_require__("./node_modules/webpack/hot/dev-server.js");
 /******/ 	
 /******/ })()

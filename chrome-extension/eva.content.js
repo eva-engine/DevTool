@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         let newOutliner = {
           id: obj?.id,
+          key:obj?.id,
           title: obj?.name,
           scene: obj?.scene?.id,
           parent: obj?.parent?.id ? obj.parent.id : 0,
@@ -87,17 +88,17 @@ document.addEventListener("DOMContentLoaded", function () {
     let result = transformToNodes(objs);
     console.log("result", result);
     window.postMessage({ result: result }, "*");
-    setInterval(() => {
-      let currentEva = window.$eva;
-      let currentInfo = transformToNodes(currentEva);
-      let nodes = currentInfo.nodes;
-      window.postMessage(
-        {
-          nodes: nodes,
-        },
-        "*"
-      );
-    }, 1000);
+    // setInterval(() => {
+    //   let currentEva = window.$eva;
+    //   let currentInfo = transformToNodes(currentEva);
+    //   let nodes = currentInfo.nodes;
+    //   window.postMessage(
+    //     {
+    //       nodes: nodes,
+    //     },
+    //     "*"
+    //   );
+    // }, 1000);
     window.addEventListener("message", function (event) {
       // 接受panel.js 借用content.js发送的编辑值，修改页面实例对象的值
       let eventKey = event.data.key;
@@ -132,7 +133,7 @@ window.addEventListener(
       chrome.runtime.sendMessage(
         { sign: "EvaDevtool", tree: result },
         function (response) {
-          // console.log(response.farewell);
+          console.log(response.farewell);
         }
       );
     }

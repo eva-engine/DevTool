@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "antd/dist/antd.css";
 import "./index.css";
 import { Tree, Input } from "antd";
@@ -13,37 +13,13 @@ const gData = [
       {
         key: "0-1-1",
         title: "f-s",
-        children: [
-          {
-            key: "0-1-1-1",
-            title: "f-s"
-          },
-          {
-            key: "0-1-2-1",
-            title: "f-t"
-          }
-        ]
       },
       {
         key: "0-1-2",
-        title: "f-t"
-      }
-    ]
-  },
-  {
-    key: "1-1",
-    title: "second",
-    children: [
-      {
-        key: "1-1-1",
-        title: "s-s"
+        title: "f-t",
       },
-      {
-        key: "1-1-2",
-        title: "s-t"
-      }
-    ]
-  }
+    ],
+  },
 ];
 
 const dataList = [];
@@ -74,21 +50,19 @@ const getParentKey = (key, tree) => {
   return parentKey;
 };
 
-export default class SearchTree extends React.Component {
-  state = {
-    expandedKeys: [],
-    searchValue: "",
-    autoExpandParent: true
+export default function SearchTree() {
+  const [expandedKeys, setExpandedKeys] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [autoExpandParent, setAutoExpandParent] = useState(true);
+
+  const onExpand = (expandedKeys) => {
+    setExpandedKeys(expandedKeys);
+    setAutoExpandParent(false);
+    console.log("gData", gData);
+    console.log("dataList", dataList);
   };
 
-  onExpand = (expandedKeys) => {
-    this.setState({
-      expandedKeys,
-      autoExpandParent: false
-    });
-  };
-
-  onChange = (e) => {
+  const onChange = (e) => {
     const { value } = e.target;
     const expandedKeys = dataList
       .map((item) => {
@@ -98,53 +72,47 @@ export default class SearchTree extends React.Component {
         return null;
       })
       .filter((item, i, self) => item && self.indexOf(item) === i);
-    this.setState({
-      expandedKeys,
-      searchValue: value,
-      autoExpandParent: true
-    });
+    setExpandedKeys(expandedKeys);
+    setSearchValue(value);
+    setAutoExpandParent(true);
   };
+  const loop = (data) =>
+    data.map((item) => {
+      const index = item.title.indexOf(searchValue);
+      const beforeStr = item.title.substr(0, index);
+      const afterStr = item.title.substr(index + searchValue.length);
+      const title =
+        index > -1 ? (
+          <span>
+            {beforeStr}
+            <span className="site-tree-search-value">{searchValue}</span>
+            {afterStr}
+          </span>
+        ) : (
+          <span>{item.title}</span>
+        );
+      if (item.children) {
+        return { title, key: item.key, children: loop(item.children) };
+      }
 
-  render() {
-    const { searchValue, expandedKeys, autoExpandParent } = this.state;
-    const loop = (data) =>
-      data.map((item) => {
-        const index = item.title.indexOf(searchValue);
-        const beforeStr = item.title.substr(0, index);
-        const afterStr = item.title.substr(index + searchValue.length);
-        const title =
-          index > -1 ? (
-            <span>
-              {beforeStr}
-              <span className="site-tree-search-value">{searchValue}</span>
-              {afterStr}
-            </span>
-          ) : (
-            <span>{item.title}</span>
-          );
-        if (item.children) {
-          return { title, key: item.key, children: loop(item.children) };
-        }
-
-        return {
-          title,
-          key: item.key
-        };
-      });
-    return (
-      <div>
-        <Search
-          style={{ marginBottom: 8 }}
-          placeholder="Search"
-          onChange={this.onChange}
-        />
-        <Tree
-          onExpand={this.onExpand}
-          expandedKeys={expandedKeys}
-          autoExpandParent={autoExpandParent}
-          treeData={loop(gData)}
-        />
-      </div>
-    );
-  }
+      return {
+        title,
+        key: item.key,
+      };
+    });
+  return (
+    <div>
+      <Search
+        style={{ marginBottom: 8 }}
+        placeholder="Search"
+        onChange={onChange}
+      />
+      <Tree
+        onExpand={onExpand}
+        expandedKeys={expandedKeys}
+        autoExpandParent={autoExpandParent}
+        treeData={loop(gData)}
+      />
+    </div>
+  );
 }

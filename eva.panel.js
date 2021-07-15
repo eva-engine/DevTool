@@ -139,16 +139,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // babel编译后的react Table
 
       const domContainer = document.querySelector("#Table");
-      let obj = [
-        {
-          h: "hello",
-          b: "back",
-        },
-        {
-          h: "hello",
-          b: "back",
-        },
-      ];
 
       // ReactDOM.render(e(Tables, { arr: obj }), domContainer);
 

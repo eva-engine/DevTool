@@ -10,8 +10,8 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, "./src/"),
     publicPath: "/",
-    host: "127.0.0.1",
-    port: 3000,
+    // host: "127.0.0.1",
+    // port: 3000,
     stats: {
       colors: true,
     },
@@ -51,8 +51,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: "src/index.html",
-      filename: "index.html",
+      template: "chrome-extension/eva.panel.html",
+      filename: "eva.panel.html",
       inject: true,
     }),
     new webpack.HotModuleReplacementPlugin(),
