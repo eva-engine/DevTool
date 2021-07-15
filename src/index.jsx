@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { Row, Col } from "antd";
 import "antd/dist/antd.css";
@@ -6,43 +6,35 @@ import "antd/dist/antd.css";
 import SearchTree from "./Components/SearchTree/index";
 import Tables from "./Components/Tables/index";
 
-class App extends React.Component {
-  state = {
-    value: undefined,
-    obj: [
-      {
-        "position.x": "0",
-        "position.y": "0",
-        name: "Transform",
-      },
-      {
-        "position.x": "0",
-        "position.y": "0",
-        name: "ninePatch",
-      },
-    ],
-  };
+function App() {
+  const [value, setValue] = useState(undefined);
 
-  onChange = (value) => {
-    console.log(value);
-    this.setState({ value });
-  };
+  const obj = [
+    {
+      "position.x": "0",
+      "position.y": "0",
+      name: "Transform",
+    },
+    {
+      "position.x": "0",
+      "position.y": "0",
+      name: "ninePatch",
+    },
+  ];
 
-  render() {
-    return (
-      <>
-        <Row>
-          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-            <SearchTree />
-          </Col>
-          <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
-          <Col xs={11} sm={11} md={11} lg={11} xl={11}>
-            <Tables className="tables" arr={this.state.obj} objId={1} />
-          </Col>
-        </Row>
-      </>
-    );
-  }
+  return (
+    <>
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+          <SearchTree />
+        </Col>
+        <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
+        <Col xs={11} sm={11} md={11} lg={11} xl={11}>
+          <Tables className="tables" arr={obj} objId={1} />
+        </Col>
+      </Row>
+    </>
+  );
 }
 
 ReactDOM.render(<App />, document.getElementById("root"));

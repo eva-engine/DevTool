@@ -6721,10 +6721,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ SearchTree)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var antd_dist_antd_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! antd/dist/antd.css */ "./node_modules/antd/dist/antd.css");
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./index.css */ "./src/Components/SearchTree/index.css");
-/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/input/index.js");
-/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/tree/index.js");
+/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/input/index.js");
+/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/tree/index.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util */ "./src/Components/SearchTree/util.js");
+/* harmony import */ var antd_dist_antd_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! antd/dist/antd.css */ "./node_modules/antd/dist/antd.css");
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./index.css */ "./src/Components/SearchTree/index.css");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -6741,22 +6742,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var Search = antd__WEBPACK_IMPORTED_MODULE_3__.default.Search;
-var gData = [{
-  key: "0-1",
-  title: "first",
-  children: [{
-    key: "0-1-1",
-    title: "f-s"
-  }, {
-    key: "0-1-2",
-    title: "f-t"
-  }]
-}];
+
+var Search = antd__WEBPACK_IMPORTED_MODULE_4__.default.Search;
 var dataList = [];
 
 var generateList = function generateList(data) {
-  for (var i = 0; i < data.length; i++) {
+  for (var i = 0; i < (data === null || data === void 0 ? void 0 : data.length); i++) {
     var node = data[i];
     var key = node.key;
     dataList.push({
@@ -6768,28 +6759,6 @@ var generateList = function generateList(data) {
       generateList(node.children);
     }
   }
-};
-
-generateList(gData);
-
-var getParentKey = function getParentKey(key, tree) {
-  var parentKey;
-
-  for (var i = 0; i < tree.length; i++) {
-    var node = tree[i];
-
-    if (node.children) {
-      if (node.children.some(function (item) {
-        return item.key === key;
-      })) {
-        parentKey = node.key;
-      } else if (getParentKey(key, node.children)) {
-        parentKey = getParentKey(key, node.children);
-      }
-    }
-  }
-
-  return parentKey;
 };
 
 function SearchTree() {
@@ -6808,18 +6777,21 @@ function SearchTree() {
       autoExpandParent = _useState6[0],
       setAutoExpandParent = _useState6[1];
 
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+      _useState8 = _slicedToArray(_useState7, 2),
+      gData = _useState8[0],
+      setGData = _useState8[1];
+
   var onExpand = function onExpand(expandedKeys) {
     setExpandedKeys(expandedKeys);
     setAutoExpandParent(false);
-    console.log("gData", gData);
-    console.log("dataList", dataList);
   };
 
   var onChange = function onChange(e) {
     var value = e.target.value;
     var expandedKeys = dataList.map(function (item) {
       if (item.title.indexOf(value) > -1) {
-        return getParentKey(item.key, gData);
+        return (0,_util__WEBPACK_IMPORTED_MODULE_1__.getParentKey)(item.key, gData);
       }
 
       return null;
@@ -6830,6 +6802,20 @@ function SearchTree() {
     setSearchValue(value);
     setAutoExpandParent(true);
   };
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+      console.log(sender.tab ? "来自内容脚本：" + sender.tab.url : "来自扩展程序");
+
+      if (request.sign == "EvaDevtool") {
+        sendResponse({
+          farewell: "SearchTree接收到"
+        });
+        setGData([request.tree.outliner]);
+        generateList(gData);
+      }
+    });
+  }, []);
 
   var loop = function loop(data) {
     return data.map(function (item) {
@@ -6861,13 +6847,46 @@ function SearchTree() {
     },
     placeholder: "Search",
     onChange: onChange
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_4__.default, {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_5__.default, {
     onExpand: onExpand,
     expandedKeys: expandedKeys,
     autoExpandParent: autoExpandParent,
     treeData: loop(gData)
   }));
 }
+
+/***/ }),
+
+/***/ "./src/Components/SearchTree/util.js":
+/*!*******************************************!*\
+  !*** ./src/Components/SearchTree/util.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getParentKey": () => (/* binding */ getParentKey)
+/* harmony export */ });
+var getParentKey = function getParentKey(key, tree) {
+  var parentKey;
+
+  for (var i = 0; i < tree.length; i++) {
+    var node = tree[i];
+
+    if (node.children) {
+      if (node.children.some(function (item) {
+        return item.key === key;
+      })) {
+        parentKey = node.key;
+      } else if (getParentKey(key, node.children)) {
+        parentKey = getParentKey(key, node.children);
+      }
+    }
+  }
+
+  return parentKey;
+};
 
 /***/ }),
 
@@ -6975,19 +6994,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function Tables(props) {
+  // let arr = props.arr;
+  // const [arr, setArr] = useState(props.arr);
   var arr = props.arr;
-  var objId = props.objId;
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-      console.log(sender.tab ? "来自内容脚本：" + sender.tab.url : "来自扩展程序");
+  var objId = props.objId; // useEffect(() => {
+  //   chrome.runtime.onMessage.addListener(function (
+  //     request,
+  //     sender,
+  //     sendResponse
+  //   ) {
+  //     console.log(
+  //       sender.tab ? "来自内容脚本：" + sender.tab.url : "来自扩展程序"
+  //     );
+  //     if (request.sign == "EvaDevtool") {
+  //       sendResponse({ farewell: "Tables" });
+  //       // setArr(request.tree.nodes[0].components);
+  //     }
+  //   });
+  // }, []);
 
-      if (request.sign == "EvaDevtool") {
-        sendResponse({
-          farewell: "欢迎使用EvaDvetool"
-        });
-      }
-    });
-  }, []);
   return arr.map(function (item, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_Table__WEBPACK_IMPORTED_MODULE_2__.default, {
       obj: item,
@@ -7030,29 +7055,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var antd_dist_antd_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! antd/dist/antd.css */ "./node_modules/antd/dist/antd.css");
 /* harmony import */ var _Components_SearchTree_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Components/SearchTree/index */ "./src/Components/SearchTree/index.jsx");
 /* harmony import */ var _Components_Tables_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Components/Tables/index */ "./src/Components/Tables/index.jsx");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -7062,77 +7075,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var App = /*#__PURE__*/function (_React$Component) {
-  _inherits(App, _React$Component);
+function App() {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(undefined),
+      _useState2 = _slicedToArray(_useState, 2),
+      value = _useState2[0],
+      setValue = _useState2[1];
 
-  var _super = _createSuper(App);
-
-  function App() {
-    var _this;
-
-    _classCallCheck(this, App);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _super.call.apply(_super, [this].concat(args));
-
-    _defineProperty(_assertThisInitialized(_this), "state", {
-      value: undefined,
-      obj: [{
-        "position.x": "0",
-        "position.y": "0",
-        name: "Transform"
-      }, {
-        "position.x": "0",
-        "position.y": "0",
-        name: "ninePatch"
-      }]
-    });
-
-    _defineProperty(_assertThisInitialized(_this), "onChange", function (value) {
-      console.log(value);
-
-      _this.setState({
-        value: value
-      });
-    });
-
-    return _this;
-  }
-
-  _createClass(App, [{
-    key: "render",
-    value: function render() {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_5__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_6__.default, {
-        xs: 12,
-        sm: 12,
-        md: 12,
-        lg: 12,
-        xl: 12
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Components_SearchTree_index__WEBPACK_IMPORTED_MODULE_3__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_6__.default, {
-        xs: 1,
-        sm: 1,
-        md: 1,
-        lg: 1,
-        xl: 1
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_6__.default, {
-        xs: 11,
-        sm: 11,
-        md: 11,
-        lg: 11,
-        xl: 11
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Components_Tables_index__WEBPACK_IMPORTED_MODULE_4__.default, {
-        className: "tables",
-        arr: this.state.obj,
-        objId: 1
-      }))));
-    }
-  }]);
-
-  return App;
-}(react__WEBPACK_IMPORTED_MODULE_0__.Component);
+  var obj = [{
+    "position.x": "0",
+    "position.y": "0",
+    name: "Transform"
+  }, {
+    "position.x": "0",
+    "position.y": "0",
+    name: "ninePatch"
+  }];
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_5__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_6__.default, {
+    xs: 12,
+    sm: 12,
+    md: 12,
+    lg: 12,
+    xl: 12
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Components_SearchTree_index__WEBPACK_IMPORTED_MODULE_3__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_6__.default, {
+    xs: 1,
+    sm: 1,
+    md: 1,
+    lg: 1,
+    xl: 1
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_6__.default, {
+    xs: 11,
+    sm: 11,
+    md: 11,
+    lg: 11,
+    xl: 11
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Components_Tables_index__WEBPACK_IMPORTED_MODULE_4__.default, {
+    className: "tables",
+    arr: obj,
+    objId: 1
+  }))));
+}
 
 react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(App, null), document.getElementById("root"));
 
@@ -9450,7 +9431,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626330487327
+      // 1626334394229
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -9470,7 +9451,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626330516403
+      // 1626334394201
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -9490,7 +9471,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626330487301
+      // 1626334394198
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -56807,7 +56788,7 @@ webpackContext.id = "./node_modules/webpack/hot sync ^\\.\\/log$";
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("3776e04d965462efe276")
+/******/ 		__webpack_require__.h = () => ("564f0d746707ee6179c8")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

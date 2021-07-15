@@ -1,30 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Tree, Input } from "antd";
+import { getParentKey } from "./util";
+
 import "antd/dist/antd.css";
 import "./index.css";
-import { Tree, Input } from "antd";
 
 const { Search } = Input;
 
-const gData = [
-  {
-    key: "0-1",
-    title: "first",
-    children: [
-      {
-        key: "0-1-1",
-        title: "f-s",
-      },
-      {
-        key: "0-1-2",
-        title: "f-t",
-      },
-    ],
-  },
-];
-
 const dataList = [];
 const generateList = (data) => {
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < data?.length; i++) {
     const node = data[i];
     const { key } = node;
     dataList.push({ key, title: key });
@@ -33,33 +18,16 @@ const generateList = (data) => {
     }
   }
 };
-generateList(gData);
-
-const getParentKey = (key, tree) => {
-  let parentKey;
-  for (let i = 0; i < tree.length; i++) {
-    const node = tree[i];
-    if (node.children) {
-      if (node.children.some((item) => item.key === key)) {
-        parentKey = node.key;
-      } else if (getParentKey(key, node.children)) {
-        parentKey = getParentKey(key, node.children);
-      }
-    }
-  }
-  return parentKey;
-};
 
 export default function SearchTree() {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [autoExpandParent, setAutoExpandParent] = useState(true);
+  const [gData, setGData] = useState([]);
 
   const onExpand = (expandedKeys) => {
     setExpandedKeys(expandedKeys);
     setAutoExpandParent(false);
-    console.log("gData", gData);
-    console.log("dataList", dataList);
   };
 
   const onChange = (e) => {
@@ -76,6 +44,22 @@ export default function SearchTree() {
     setSearchValue(value);
     setAutoExpandParent(true);
   };
+  useEffect(() => {
+    chrome.runtime.onMessage.addListener(function (
+      request,
+      sender,
+      sendResponse
+    ) {
+      console.log(
+        sender.tab ? "来自内容脚本：" + sender.tab.url : "来自扩展程序"
+      );
+      if (request.sign == "EvaDevtool") {
+        sendResponse({ farewell: "SearchTree接收到" });
+        setGData([request.tree.outliner]);
+        generateList(gData);
+      }
+    });
+  }, []);
   const loop = (data) =>
     data.map((item) => {
       const index = item.title.indexOf(searchValue);
@@ -100,6 +84,7 @@ export default function SearchTree() {
         key: item.key,
       };
     });
+
   return (
     <div>
       <Search
