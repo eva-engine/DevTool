@@ -19,11 +19,11 @@ const generateList = (data) => {
   }
 };
 
-export default function SearchTree() {
+export default function SearchTree(props) {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [autoExpandParent, setAutoExpandParent] = useState(true);
-  const [gData, setGData] = useState([]);
+  const gData = props.gData;
 
   const onExpand = (expandedKeys) => {
     setExpandedKeys(expandedKeys);
@@ -44,22 +44,11 @@ export default function SearchTree() {
     setSearchValue(value);
     setAutoExpandParent(true);
   };
+
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(function (
-      request,
-      sender,
-      sendResponse
-    ) {
-      console.log(
-        sender.tab ? "来自内容脚本：" + sender.tab.url : "来自扩展程序"
-      );
-      if (request.sign == "EvaDevtool") {
-        sendResponse({ farewell: "SearchTree接收到" });
-        setGData([request.tree.outliner]);
-        generateList(gData);
-      }
-    });
+    generateList(gData);
   }, []);
+  
   const loop = (data) =>
     data.map((item) => {
       const index = item.title.indexOf(searchValue);

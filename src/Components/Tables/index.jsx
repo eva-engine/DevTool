@@ -2,10 +2,8 @@ import "./index.css";
 import React, { useState,useEffect } from "react";
 import Table from "./Table";
 export default function Tables(props) {
-  // let arr = props.arr;
-  // const [arr, setArr] = useState(props.arr);
   let arr = props.arr;
-  let objId = props.objId;
+  let objId = 1;
   // useEffect(() => {
   //   chrome.runtime.onMessage.addListener(function (
   //     request,
@@ -17,10 +15,13 @@ export default function Tables(props) {
   //     );
   //     if (request.sign == "EvaDevtool") {
   //       sendResponse({ farewell: "Tables" });
-  //       // setArr(request.tree.nodes[0].components);
+  //       setArr(request.tree.nodes[1].components);
+  //       // arr = request.tree.nodes[1].components;
+  //       console.log('request', request.tree);
   //     }
   //   });
   // }, []);
+
   return arr.map((item, index) => (
     <Table obj={item} component={index} objId={objId} />
   ));
