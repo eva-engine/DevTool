@@ -23,6 +23,7 @@ export default function SearchTree(props) {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [autoExpandParent, setAutoExpandParent] = useState(true);
+  const [nodeId, setNodeId] = useState(1);
   const gData = props.gData;
 
   const onExpand = (expandedKeys) => {
@@ -56,7 +57,7 @@ export default function SearchTree(props) {
       const afterStr = item.title.substr(index + searchValue.length);
       const title =
         index > -1 ? (
-          <span>
+          <span onClick={()=>{setNodeId(item.id)}}>
             {beforeStr}
             <span className="site-tree-search-value">{searchValue}</span>
             {afterStr}

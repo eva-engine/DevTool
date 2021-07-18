@@ -103,6 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // 接受panel.js 借用content.js发送的编辑值，修改页面实例对象的值
       let eventKey = event.data.key;
       const eventValue = event.data.value;
+      console.log('eventKey', eventKey);
+      console.log('eventValue', eventValue);
       if (eventKey) {
         // console.log("inject", `${eventKey}: ${event.data.value}`);
         let keys = eventKey.split("-");
@@ -154,8 +156,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.cmd == "test") {
     // alert(`${request.key}: ${request.value}`);
     window.postMessage({ key: request.key, value: request.value });
+    console.log('key', request.key);
   }
-  sendResponse("我收到了你的消息！");
+  console.log('hh');
+  sendResponse("hhh");
 });
 
 // chrome.runtime.onConnect.addListener(function(port) {

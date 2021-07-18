@@ -4,7 +4,7 @@ import Table from "./Table";
 export default function Tables(props) {
   // let arr = props.arr[1].components;
   let arr = props.arr;
-  let objId = 1;
+  let objId = 2;
   // useEffect(() => {
   //   chrome.runtime.onMessage.addListener(function (
   //     request,

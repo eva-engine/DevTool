@@ -7617,6 +7617,11 @@ function SearchTree(props) {
       autoExpandParent = _useState6[0],
       setAutoExpandParent = _useState6[1];
 
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
+      _useState8 = _slicedToArray(_useState7, 2),
+      nodeId = _useState8[0],
+      setNodeId = _useState8[1];
+
   var gData = props.gData;
 
   var onExpand = function onExpand(expandedKeys) {
@@ -7649,7 +7654,11 @@ function SearchTree(props) {
       var index = item.title.indexOf(searchValue);
       var beforeStr = item.title.substr(0, index);
       var afterStr = item.title.substr(index + searchValue.length);
-      var title = index > -1 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, beforeStr, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+      var title = index > -1 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+        onClick: function onClick() {
+          setNodeId(item.id);
+        }
+      }, beforeStr, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
         className: "site-tree-search-value"
       }, searchValue), afterStr) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, item.title);
 
@@ -7753,21 +7762,23 @@ function Table(props) {
   var component = props.component;
   var objId = props.objId;
 
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0),
       _useState2 = _slicedToArray(_useState, 2),
       value = _useState2[0],
       setValue = _useState2[1];
 
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
       _useState4 = _slicedToArray(_useState3, 2),
       key = _useState4[0],
       setKey = _useState4[1];
 
-  var handleChange = function handleChange(e) {// setValue(e.target.value);
-    // setKey(e.target.className);
+  var handleChange = function handleChange(e, itemKey) {
+    setValue(e);
+    setKey("".concat(itemKey, "-").concat(objId, "-").concat(component));
   };
 
-  var handleBlur = function handleBlur() {
+  var handleBlur = function handleBlur(itemKey) {
+    obj[itemKey] = value;
     console.log(key, value);
 
     function sendMessageToContentScript(message, callback) {
@@ -7781,15 +7792,18 @@ function Table(props) {
       });
     }
 
-    if (value) {
+    if (value && key) {
       sendMessageToContentScript({
         cmd: "test",
         key: key,
         value: value
       }, function (response) {
-        console.log("来自content的回复：" + response);
+        console.log("来自content回复：" + response);
       });
     }
+
+    setKey('');
+    setValue(undefined);
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(antd__WEBPACK_IMPORTED_MODULE_2__.default, {
@@ -7810,19 +7824,13 @@ function Table(props) {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(antd__WEBPACK_IMPORTED_MODULE_3__.default, {
       defaultValue: "".concat(obj[key]),
       onChange: function onChange(e) {
-        return handleChange(e);
+        return handleChange(e, key);
       },
       min: -2000,
-      max: 2000 // onFocus={(e) => {
-      //   e.target.placeholder = "";
-      // }}
-      ,
+      max: 2000,
       onBlur: function onBlur(e) {
-        handleBlur(); // if (!e.target.value) {
-        //   e.target.placeholder = obj[key];
-        // }
-      } // className={`${key}-${objId}-${component}`}
-
+        handleBlur(key);
+      }
     })));
   }));
 }
@@ -7849,7 +7857,7 @@ __webpack_require__.r(__webpack_exports__);
 function Tables(props) {
   // let arr = props.arr[1].components;
   var arr = props.arr;
-  var objId = 1; // useEffect(() => {
+  var objId = 2; // useEffect(() => {
   //   chrome.runtime.onMessage.addListener(function (
   //     request,
   //     sender,
@@ -11664,7 +11672,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626588188685
+      // 1626596414753
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -11684,7 +11692,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626588188688
+      // 1626596414757
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -11704,7 +11712,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626588188690
+      // 1626596414755
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -68185,7 +68193,7 @@ webpackContext.id = "./node_modules/webpack/hot sync ^\\.\\/log$";
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("5dbea4053de3f490914b")
+/******/ 		__webpack_require__.h = () => ("fa7e959c035d3e7bace1")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
