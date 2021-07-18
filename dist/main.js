@@ -7865,34 +7865,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function Tables(props) {
-  // let arr = props.arr[1].components;
-  var arr = props.arr;
+  var nodes = props.nodes;
   var objId = 2;
+  var arr;
 
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_Data__WEBPACK_IMPORTED_MODULE_3__.CategoryDataContext),
       data = _useContext.data,
-      dispatch = _useContext.dispatch;
+      dispatch = _useContext.dispatch; // let arr = props.arr[data].components;
 
-  console.log('nodeId', data);
-  objId = nodeId; // useEffect(() => {
-  //   chrome.runtime.onMessage.addListener(function (
-  //     request,
-  //     sender,
-  //     sendResponse
-  //   ) {
-  //     console.log(
-  //       sender.tab ? "来自内容脚本：" + sender.tab.url : "来自扩展程序"
-  //     );
-  //     if (request.sign == "EvaDevtool") {
-  //       sendResponse({ farewell: "Tables" });
-  //       setArr(request.tree.nodes[1].components);
-  //       // arr = request.tree.nodes[1].components;
-  //       console.log('request', request.tree);
-  //     }
-  //   });
-  // }, []);
 
-  return arr.map(function (item, index) {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    console.log("nodeId", data);
+  }, [data]);
+  return nodes.map(function (item, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_Table__WEBPACK_IMPORTED_MODULE_2__.default, {
       obj: item,
       component: index,
@@ -8030,6 +8015,11 @@ function App() {
       components = _useState4[0],
       setComponents = _useState4[1];
 
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      nodes = _useState6[0],
+      setNodes = _useState6[1];
+
   var obj = [{
     "position.x": "0",
     "position.y": "0",
@@ -8049,8 +8039,11 @@ function App() {
         });
         setGData([request.tree.outliner]);
         setComponents(request.tree.nodes[2].components);
+        setNodes(request.tree.nodes);
         console.log('request.tree.nodes', request.tree.nodes);
         console.log('components', request.tree.nodes[1].components); // setComponents(request.tree.nodes);
+
+        console.log('nodes', nodes);
       }
     });
   }, []);
@@ -8076,7 +8069,7 @@ function App() {
     xl: 11
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Components_Tables_index__WEBPACK_IMPORTED_MODULE_3__.default, {
     className: "tables",
-    arr: components
+    nodes: nodes
   })))));
 }
 
@@ -11755,7 +11748,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626612220666
+      // 1626614192555
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -11775,7 +11768,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626612220669
+      // 1626614192559
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -11795,7 +11788,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626612220671
+      // 1626614192562
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -68276,7 +68269,7 @@ webpackContext.id = "./node_modules/webpack/hot sync ^\\.\\/log$";
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("7cfe2d6eeded1974dc01")
+/******/ 		__webpack_require__.h = () => ("d05a3dfdc55d0b23e9ef")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

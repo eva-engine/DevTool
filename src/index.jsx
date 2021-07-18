@@ -11,6 +11,7 @@ import "antd/dist/antd.css";
 function App() {
   const [gData, setGData] = useState([]);
   const [components, setComponents] = useState([])
+  const[nodes, setNodes] = useState([]);
 
   const obj = [
     {
@@ -37,9 +38,11 @@ function App() {
         sendResponse({ farewell: "index.jsx接收到" });
         setGData([request.tree.outliner]);
         setComponents(request.tree.nodes[2].components);
+        setNodes(request.tree.nodes);
         console.log('request.tree.nodes',request.tree.nodes);
         console.log('components',request.tree.nodes[1].components);
         // setComponents(request.tree.nodes);
+        console.log('nodes', nodes);
       }
     });
   }, []);
@@ -53,7 +56,7 @@ function App() {
         </Col>
         <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
         <Col xs={11} sm={11} md={11} lg={11} xl={11}>
-          <Tables className="tables" arr={components} />
+          <Tables className="tables" nodes={nodes} />
         </Col>
       </Row>
     </Data>
