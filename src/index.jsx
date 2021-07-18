@@ -37,7 +37,7 @@ function App() {
       if (request.sign == "EvaDevtool") {
         sendResponse({ farewell: "index.jsx接收到" });
         setGData([request.tree.outliner]);
-        setComponents(request.tree.nodes[2].components);
+        setComponents(request.tree.nodes[1].components);
         setNodes(request.tree.nodes);
         console.log('request.tree.nodes',request.tree.nodes);
         console.log('components',request.tree.nodes[1].components);
@@ -56,7 +56,7 @@ function App() {
         </Col>
         <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
         <Col xs={11} sm={11} md={11} lg={11} xl={11}>
-          <Tables className="tables" nodes={nodes} />
+          <Tables className="tables" initComponents={components} nodes={nodes} />
         </Col>
       </Row>
     </Data>

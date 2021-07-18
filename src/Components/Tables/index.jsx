@@ -5,15 +5,16 @@ import { CategoryDataContext } from "../../Data";
 
 export default function Tables(props) {
   let nodes = props.nodes;
+  let components = props.initComponents;
   let objId = 2;
-  let arr;
   const { data, dispatch } = useContext(CategoryDataContext);
-  // let arr = props.arr[data].components;
+  
   useEffect(()=>{
     console.log("nodeId", data);
+    if(nodes.length>0){components = nodes[data].components;}
   },[data])
 
-  return nodes.map((item, index) => (
+  return components.map((item, index) => (
     <Table obj={item} component={index} objId={objId} />
   ));
 }

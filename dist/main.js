@@ -7866,18 +7866,21 @@ __webpack_require__.r(__webpack_exports__);
 
 function Tables(props) {
   var nodes = props.nodes;
+  var components = props.initComponents;
   var objId = 2;
-  var arr;
 
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_Data__WEBPACK_IMPORTED_MODULE_3__.CategoryDataContext),
       data = _useContext.data,
-      dispatch = _useContext.dispatch; // let arr = props.arr[data].components;
-
+      dispatch = _useContext.dispatch;
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     console.log("nodeId", data);
+
+    if (nodes.length > 0) {
+      components = nodes[data].components;
+    }
   }, [data]);
-  return nodes.map(function (item, index) {
+  return components.map(function (item, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_Table__WEBPACK_IMPORTED_MODULE_2__.default, {
       obj: item,
       component: index,
@@ -8038,7 +8041,7 @@ function App() {
           farewell: "index.jsx接收到"
         });
         setGData([request.tree.outliner]);
-        setComponents(request.tree.nodes[2].components);
+        setComponents(request.tree.nodes[1].components);
         setNodes(request.tree.nodes);
         console.log('request.tree.nodes', request.tree.nodes);
         console.log('components', request.tree.nodes[1].components); // setComponents(request.tree.nodes);
@@ -8069,6 +8072,7 @@ function App() {
     xl: 11
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Components_Tables_index__WEBPACK_IMPORTED_MODULE_3__.default, {
     className: "tables",
+    initComponents: components,
     nodes: nodes
   })))));
 }
@@ -11748,7 +11752,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626614192555
+      // 1626618519481
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -11768,7 +11772,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626614192559
+      // 1626618519488
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -11788,7 +11792,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626614192562
+      // 1626618519485
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -68269,7 +68273,7 @@ webpackContext.id = "./node_modules/webpack/hot sync ^\\.\\/log$";
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("d05a3dfdc55d0b23e9ef")
+/******/ 		__webpack_require__.h = () => ("80fc1eeacb7f25088e4c")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
