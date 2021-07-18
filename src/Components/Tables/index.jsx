@@ -2,6 +2,7 @@ import "./index.css";
 import React, { useState,useEffect } from "react";
 import Table from "./Table";
 export default function Tables(props) {
+  // let arr = props.arr[1].components;
   let arr = props.arr;
   let objId = 1;
   // useEffect(() => {

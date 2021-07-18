@@ -26246,7 +26246,7 @@ div.ant-typography-edit-content.ant-typography-rtl {
 .ant-input,
 .ant-input-search-button,
 .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
-  background-color: #fcfff4;
+  /* background-color: #fcfff4; */
 }
 
 .ant-tree-list-holder-inner {
@@ -26260,7 +26260,7 @@ div.ant-typography-edit-content.ant-typography-rtl {
 
 .ant-input,
 .ant-input-search-button {
-  background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  /* background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%); */
 }
 
 .ant-input-search-button {
@@ -26279,16 +26279,13 @@ div.ant-typography-edit-content.ant-typography-rtl {
 body {
   background-color: #333;
 }
-table {
-  border: 1px solid #fcfff4;
+.tableContentWrapper{
+  margin: 5px;
 }
 .tableName {
   color: #fcfff4;
   font-size: 15px;
   padding-left: 5px;
-}
-td {
-  padding: 5px;
 }
 input {
   border: 1px solid #333;
@@ -26296,9 +26293,9 @@ input {
   /* height: 25px; */
   /* max-width: 200px; */
   background: #fcfff4;
-  background:linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  /* background:linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%); */
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
-  width: 100px;
+  width: 80px;
   color: #333;
 }
 ::placeholder {
@@ -26309,9 +26306,12 @@ input {
   border-radius: 3px;
 }
 .key {
-  color: #fcfff4;
+  /* color: #fcfff4; */
+  color: #000;
   font-size: 15px;
 }
-
+.propertyInput{
+  padding-left: 10px;
+}
 
 /*# sourceMappingURL=main.css.map*/

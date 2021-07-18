@@ -9,7 +9,7 @@ module.exports = {
   devtool: "cheap-module-source-map",
   devServer: {
     contentBase: path.join(__dirname, "./src/"),
-    publicPath: "/",
+    // publicPath: "/",
     // host: "127.0.0.1",
     // port: 3000,
     stats: {

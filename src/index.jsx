@@ -35,7 +35,10 @@ function App() {
       if (request.sign == "EvaDevtool") {
         sendResponse({ farewell: "index.jsx接收到" });
         setGData([request.tree.outliner]);
-        setComponents(request.tree.nodes[1].components);
+        setComponents(request.tree.nodes[2].components);
+        console.log('request.tree.nodes',request.tree.nodes);
+        console.log('components',request.tree.nodes[1].components);
+        // setComponents(request.tree.nodes);
       }
     });
   }, []);
