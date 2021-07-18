@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { Tree, Input } from "antd";
 import { getParentKey } from "./util";
+import { CategoryDataContext } from "../../Data";
 
 import "antd/dist/antd.css";
 import "./index.css";
+import { CHANGE_NODE_ID } from "../../Data";
 
 const { Search } = Input;
 
@@ -23,8 +25,10 @@ export default function SearchTree(props) {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [autoExpandParent, setAutoExpandParent] = useState(true);
-  const [nodeId, setNodeId] = useState(1);
+  // const [nodeId, setNodeId] = useState(1);
   const gData = props.gData;
+  const { data, dispatch } = useContext(CategoryDataContext);
+  const { nodeId } = data;
 
   const onExpand = (expandedKeys) => {
     setExpandedKeys(expandedKeys);
@@ -49,7 +53,7 @@ export default function SearchTree(props) {
   useEffect(() => {
     generateList(gData);
   }, []);
-  
+
   const loop = (data) =>
     data.map((item) => {
       const index = item.title.indexOf(searchValue);
@@ -57,7 +61,12 @@ export default function SearchTree(props) {
       const afterStr = item.title.substr(index + searchValue.length);
       const title =
         index > -1 ? (
-          <span onClick={()=>{setNodeId(item.id)}}>
+          <span
+            onClick={() => {
+              dispatch({ type: CHANGE_NODE_ID, data: item.id });
+              // updateDispatch(nodeId, item.id);
+            }}
+          >
             {beforeStr}
             <span className="site-tree-search-value">{searchValue}</span>
             {afterStr}

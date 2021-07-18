@@ -4,6 +4,7 @@ import { Row, Col } from "antd";
 
 import SearchTree from "./Components/SearchTree/index";
 import Tables from "./Components/Tables/index";
+import Data from "./Data"
 
 import "antd/dist/antd.css";
 
@@ -45,6 +46,7 @@ function App() {
 
   return (
     <>
+    <Data>
       <Row>
         <Col xs={12} sm={12} md={12} lg={12} xl={12}>
           <SearchTree gData={gData} />
@@ -54,6 +56,7 @@ function App() {
           <Tables className="tables" arr={components} />
         </Col>
       </Row>
+    </Data>
     </>
   );
 }

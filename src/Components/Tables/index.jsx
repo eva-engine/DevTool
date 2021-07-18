@@ -1,10 +1,15 @@
 import "./index.css";
-import React, { useState,useEffect } from "react";
+import React,{useContext} from "react";
 import Table from "./Table";
+import { CategoryDataContext } from "../../Data";
+
 export default function Tables(props) {
   // let arr = props.arr[1].components;
   let arr = props.arr;
   let objId = 2;
+  const { data, dispatch } = useContext(CategoryDataContext);
+  console.log('nodeId', data);
+  objId = nodeId;
   // useEffect(() => {
   //   chrome.runtime.onMessage.addListener(function (
   //     request,
