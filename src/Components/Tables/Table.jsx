@@ -1,22 +1,23 @@
-import "./index.css";
 import React, { useState } from "react";
-import { Card,InputNumber } from "antd";
+import { Card, InputNumber } from "antd";
+
+import "./index.css";
 
 export default function Table(props) {
   let arr = Object.keys(props.obj);
+  console.log('props.obj',props.obj);
   let obj = props.obj;
-  let component = props.component;
-  let objId = props.objId;
+  let componentId = props.componentId;
+  const objId = props.objId;
   const [value, setValue] = useState(0);
-  const [key, setKey] = useState('');
+  const [key, setKey] = useState("");
 
-  const handleChange = function (e,itemKey) {
+  const handleChange = function (e, itemKey) {
     setValue(e);
-    setKey(`${itemKey}-${objId}-${component}`);
+    setKey(`${itemKey}-${objId}-${componentId}`);
   };
 
   const handleBlur = function (itemKey) {
-    
     obj[itemKey] = value;
     console.log(key, value);
     function sendMessageToContentScript(message, callback) {
@@ -26,7 +27,7 @@ export default function Table(props) {
         });
       });
     }
-    if (value&&key) {
+    if (value && key) {
       sendMessageToContentScript(
         { cmd: "test", key: key, value: value },
         function (response) {
@@ -34,7 +35,7 @@ export default function Table(props) {
         }
       );
     }
-    setKey('');
+    setKey("");
     setValue(undefined);
   };
   return (
@@ -47,11 +48,11 @@ export default function Table(props) {
             <span className="propertyInput" key={key + "input"}>
               <InputNumber
                 defaultValue={`${obj[key]}`}
-                onChange={(e) => handleChange(e,key)}
+                onChange={(e) => handleChange(e, key)}
                 min={-2000}
                 max={2000}
-                onBlur={(e)=>{
-                  handleBlur(key)
+                onBlur={(e) => {
+                  handleBlur(key);
                 }}
               />
             </span>

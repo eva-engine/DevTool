@@ -1,20 +1,24 @@
 import "./index.css";
 import React, { useContext, useEffect } from "react";
 import Table from "./Table";
-import { CategoryDataContext } from "../../Data";
+import { CategoryDataContext, SET_COMPONENTS } from "../../Data";
 
-export default function Tables(props) {
-  let nodes = props.nodes;
-  let components = props.initComponents;
-  let objId = 2;
+export default function Tables() {
   const { data, dispatch } = useContext(CategoryDataContext);
-  
-  useEffect(()=>{
-    console.log("nodeId", data);
-    if(nodes.length>0){components = nodes[data].components;}
-  },[data])
+  const { nodes, nodeId, components } = data;
 
-  return components.map((item, index) => (
-    <Table obj={item} component={index} objId={objId} />
-  ));
+  useEffect(() => {
+    if (nodes) {
+      dispatch({
+        type: SET_COMPONENTS,
+        data: { components: nodes[nodeId].components },
+      });
+    }
+  }, [nodeId]);
+
+  return components
+    ? components.map((item, index) => (
+        <Table obj={item} componentId={index} objId={nodeId} />
+      ))
+    : null;
 }

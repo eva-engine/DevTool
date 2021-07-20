@@ -7604,7 +7604,7 @@ var generateList = function generateList(data) {
   }
 };
 
-function SearchTree(props) {
+function SearchTree() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
       expandedKeys = _useState2[0],
@@ -7618,16 +7618,15 @@ function SearchTree(props) {
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
       _useState6 = _slicedToArray(_useState5, 2),
       autoExpandParent = _useState6[0],
-      setAutoExpandParent = _useState6[1]; // const [nodeId, setNodeId] = useState(1);
-
-
-  var gData = props.gData;
+      setAutoExpandParent = _useState6[1];
 
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Data__WEBPACK_IMPORTED_MODULE_2__.CategoryDataContext),
       data = _useContext.data,
       dispatch = _useContext.dispatch;
 
-  var nodeId = data.nodeId;
+  var nodeId = data.nodeId,
+      gData = data.gData;
+  console.log("searchTree", gData);
 
   var onExpand = function onExpand(expandedKeys) {
     setExpandedKeys(expandedKeys);
@@ -7663,7 +7662,9 @@ function SearchTree(props) {
         onClick: function onClick() {
           dispatch({
             type: _Data__WEBPACK_IMPORTED_MODULE_2__.CHANGE_NODE_ID,
-            data: item.id
+            data: {
+              nodeId: item.id
+            }
           }); // updateDispatch(nodeId, item.id);
         }
       }, beforeStr, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
@@ -7683,9 +7684,10 @@ function SearchTree(props) {
         key: item.key
       };
     });
-  };
+  }; // return <div></div>
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Search, {
+
+  return gData ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Search, {
     style: {
       marginBottom: 8
     },
@@ -7696,7 +7698,7 @@ function SearchTree(props) {
     expandedKeys: expandedKeys,
     autoExpandParent: autoExpandParent,
     treeData: loop(gData)
-  }));
+  })) : null;
 }
 
 /***/ }),
@@ -7766,8 +7768,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function Table(props) {
   var arr = Object.keys(props.obj);
+  console.log('props.obj', props.obj);
   var obj = props.obj;
-  var component = props.component;
+  var componentId = props.componentId;
   var objId = props.objId;
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0),
@@ -7775,14 +7778,14 @@ function Table(props) {
       value = _useState2[0],
       setValue = _useState2[1];
 
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
       _useState4 = _slicedToArray(_useState3, 2),
       key = _useState4[0],
       setKey = _useState4[1];
 
   var handleChange = function handleChange(e, itemKey) {
     setValue(e);
-    setKey("".concat(itemKey, "-").concat(objId, "-").concat(component));
+    setKey("".concat(itemKey, "-").concat(objId, "-").concat(componentId));
   };
 
   var handleBlur = function handleBlur(itemKey) {
@@ -7810,7 +7813,7 @@ function Table(props) {
       });
     }
 
-    setKey('');
+    setKey("");
     setValue(undefined);
   };
 
@@ -7864,29 +7867,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Tables(props) {
-  var nodes = props.nodes;
-  var components = props.initComponents;
-  var objId = 2;
-
+function Tables() {
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(_Data__WEBPACK_IMPORTED_MODULE_3__.CategoryDataContext),
       data = _useContext.data,
       dispatch = _useContext.dispatch;
 
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    console.log("nodeId", data);
+  console.log("tables", data);
+  var nodes = data.nodes,
+      nodeId = data.nodeId,
+      components = data.components; // if (nodes.length > 0) {
+  //   setComponents(nodes[nodeId].components);
+  // }
 
-    if (nodes.length > 0) {
-      components = nodes[data].components;
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    if (nodes) {
+      dispatch({
+        type: _Data__WEBPACK_IMPORTED_MODULE_3__.SET_COMPONENTS,
+        data: {
+          components: nodes[nodeId].components
+        }
+      });
     }
-  }, [data]);
-  return components.map(function (item, index) {
+  }, [nodeId]);
+  return components ? components.map(function (item, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_Table__WEBPACK_IMPORTED_MODULE_2__.default, {
       obj: item,
-      component: index,
-      objId: objId
+      componentId: index,
+      objId: nodeId
     });
-  });
+  }) : null;
 }
 
 /***/ }),
@@ -7902,6 +7911,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "CategoryDataContext": () => (/* binding */ CategoryDataContext),
 /* harmony export */   "CHANGE_NODE_ID": () => (/* binding */ CHANGE_NODE_ID),
+/* harmony export */   "INIT_DEVTOOL": () => (/* binding */ INIT_DEVTOOL),
+/* harmony export */   "SET_COMPONENTS": () => (/* binding */ SET_COMPONENTS),
 /* harmony export */   "default": () => (/* binding */ Data)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
@@ -7917,17 +7928,38 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
  //context
 
 var CategoryDataContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({}); // 相当于之前的 constants
 
-var CHANGE_NODE_ID = "changeNodeId"; //reducer 纯函数
+var CHANGE_NODE_ID = "changeNodeId";
+var INIT_DEVTOOL = "initDevTool";
+var SET_COMPONENTS = 'setComponents'; //reducer 纯函数
 
 var reducer = function reducer(state, action) {
   switch (action.type) {
     case CHANGE_NODE_ID:
-      // return state = action.data
-      return action.data;
+      return _objectSpread(_objectSpread({}, state), {}, {
+        nodeId: action.data.nodeId
+      });
+
+    case INIT_DEVTOOL:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        components: action.data.initComponents,
+        nodes: action.data.nodes,
+        gData: action.data.gData
+      });
+
+    case SET_COMPONENTS:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        components: action.data.components
+      });
 
     default:
       return state;
@@ -7951,7 +7983,6 @@ function Data(props) {
     }
   }, props.children);
 }
-;
 
 /***/ }),
 
@@ -7987,18 +8018,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Tables_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Components/Tables/index */ "./src/Components/Tables/index.jsx");
 /* harmony import */ var _Data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Data */ "./src/Data.jsx");
 /* harmony import */ var antd_dist_antd_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! antd/dist/antd.css */ "./node_modules/antd/dist/antd.css");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 
 
 
@@ -8008,20 +8027,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 function App() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
-      _useState2 = _slicedToArray(_useState, 2),
-      gData = _useState2[0],
-      setGData = _useState2[1];
-
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
-      _useState4 = _slicedToArray(_useState3, 2),
-      components = _useState4[0],
-      setComponents = _useState4[1];
-
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
-      _useState6 = _slicedToArray(_useState5, 2),
-      nodes = _useState6[0],
-      setNodes = _useState6[1];
+  var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Data__WEBPACK_IMPORTED_MODULE_4__.CategoryDataContext),
+      data = _useContext.data,
+      dispatch = _useContext.dispatch;
 
   var obj = [{
     "position.x": "0",
@@ -8040,25 +8048,31 @@ function App() {
         sendResponse({
           farewell: "index.jsx接收到"
         });
-        setGData([request.tree.outliner]);
-        setComponents(request.tree.nodes[1].components);
-        setNodes(request.tree.nodes);
-        console.log('request.tree.nodes', request.tree.nodes);
-        console.log('components', request.tree.nodes[1].components); // setComponents(request.tree.nodes);
-
-        console.log('nodes', nodes);
+        dispatch({
+          type: _Data__WEBPACK_IMPORTED_MODULE_4__.CHANGE_NODE_ID,
+          data: {
+            nodeId: 2
+          }
+        });
+        dispatch({
+          type: _Data__WEBPACK_IMPORTED_MODULE_4__.INIT_DEVTOOL,
+          data: {
+            gData: [request.tree.outliner],
+            initComponents: request.tree.nodes[1].components,
+            nodes: request.tree.nodes
+          }
+        });
       }
     });
+    return function () {};
   }, []);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Data__WEBPACK_IMPORTED_MODULE_4__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_6__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_7__.default, {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_6__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_7__.default, {
     xs: 12,
     sm: 12,
     md: 12,
     lg: 12,
     xl: 12
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Components_SearchTree_index__WEBPACK_IMPORTED_MODULE_2__.default, {
-    gData: gData
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_7__.default, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Components_SearchTree_index__WEBPACK_IMPORTED_MODULE_2__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(antd__WEBPACK_IMPORTED_MODULE_7__.default, {
     xs: 1,
     sm: 1,
     md: 1,
@@ -8071,13 +8085,11 @@ function App() {
     lg: 11,
     xl: 11
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Components_Tables_index__WEBPACK_IMPORTED_MODULE_3__.default, {
-    className: "tables",
-    initComponents: components,
-    nodes: nodes
-  })))));
+    className: "tables"
+  }))));
 }
 
-react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(App, null), document.getElementById("root"));
+react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Data__WEBPACK_IMPORTED_MODULE_4__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(App, null)), document.getElementById("root"));
 
 /***/ }),
 
@@ -11752,7 +11764,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626618519481
+      // 1626759227566
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -11772,7 +11784,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626618519488
+      // 1626759227573
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -11792,7 +11804,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1626618519485
+      // 1626759227570
       var cssReload = __webpack_require__(/*! ./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -68273,7 +68285,7 @@ webpackContext.id = "./node_modules/webpack/hot sync ^\\.\\/log$";
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("80fc1eeacb7f25088e4c")
+/******/ 		__webpack_require__.h = () => ("952fc6807f0dd6f26d12")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

@@ -1,30 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Row, Col } from "antd";
+import "antd/dist/antd.css";
 
 import SearchTree from "./Components/SearchTree/index";
 import Tables from "./Components/Tables/index";
-import Data from "./Data"
-
-import "antd/dist/antd.css";
+import Data, {
+  CategoryDataContext,
+  INIT_DEVTOOL,
+  CHANGE_NODE_ID,
+} from "./Data";
 
 function App() {
-  const [gData, setGData] = useState([]);
-  const [components, setComponents] = useState([])
-  const[nodes, setNodes] = useState([]);
+  const { dispatch } = useContext(CategoryDataContext);
+  // const obj = [
+  //   {
+  //     "position.x": "0",
+  //     "position.y": "0",
+  //     name: "Transform",
+  //   },
+  //   {
+  //     "position.x": "0",
+  //     "position.y": "0",
+  //     name: "ninePatch",
+  //   },
+  // ];
 
-  const obj = [
-    {
-      "position.x": "0",
-      "position.y": "0",
-      name: "Transform",
-    },
-    {
-      "position.x": "0",
-      "position.y": "0",
-      name: "ninePatch",
-    },
-  ];
   useEffect(() => {
     chrome.runtime.onMessage.addListener(function (
       request,
@@ -36,32 +37,38 @@ function App() {
       );
       if (request.sign == "EvaDevtool") {
         sendResponse({ farewell: "index.jsx接收到" });
-        setGData([request.tree.outliner]);
-        setComponents(request.tree.nodes[1].components);
-        setNodes(request.tree.nodes);
-        console.log('request.tree.nodes',request.tree.nodes);
-        console.log('components',request.tree.nodes[1].components);
-        // setComponents(request.tree.nodes);
-        console.log('nodes', nodes);
+        dispatch({ type: CHANGE_NODE_ID, data: { nodeId: 2 } });
+        dispatch({
+          type: INIT_DEVTOOL,
+          data: {
+            gData: [request.tree.outliner],
+            initComponents: request.tree.nodes[1].components,
+            nodes: request.tree.nodes,
+          },
+        });
       }
     });
+    return () => {};
   }, []);
 
   return (
     <>
-    <Data>
       <Row>
         <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-          <SearchTree gData={gData} />
+          <SearchTree />
         </Col>
         <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
         <Col xs={11} sm={11} md={11} lg={11} xl={11}>
-          <Tables className="tables" initComponents={components} nodes={nodes} />
+          <Tables className="tables" />
         </Col>
       </Row>
-    </Data>
     </>
   );
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <Data>
+    <App />
+  </Data>,
+  document.getElementById("root")
+);

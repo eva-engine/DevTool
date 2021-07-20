@@ -5,27 +5,38 @@ export const CategoryDataContext = createContext({});
 
 // 相当于之前的 constants
 export const CHANGE_NODE_ID = "changeNodeId";
+export const INIT_DEVTOOL = "initDevTool";
+export const SET_COMPONENTS = 'setComponents';
 
-//reducer 纯函数
 const reducer = (state, action) => {
   switch (action.type) {
     case CHANGE_NODE_ID:
-        // return state = action.data
-      return  action.data;
+      return { ...state, nodeId: action.data.nodeId };
+    case INIT_DEVTOOL:
+      return {
+        ...state,
+        components: action.data.initComponents,
+        nodes: action.data.nodes,
+        gData: action.data.gData,
+      };
+    case SET_COMPONENTS:
+      return{
+        ...state, 
+        components: action.data.components
+      }
     default:
       return state;
   }
 };
 
-//Provider 组件
-export default function Data(props){
-  //useReducer 的第二个参数中传入初始值
+export default function Data(props) {
   const [data, dispatch] = useReducer(reducer, {
     nodeId: 1,
   });
+
   return (
     <CategoryDataContext.Provider value={{ data, dispatch }}>
       {props.children}
     </CategoryDataContext.Provider>
   );
-};
+}
