@@ -61,7 +61,6 @@ export default function SearchTree() {
           <span
             onClick={() => {
               dispatch({ type: CHANGE_NODE_ID, data: { nodeId: item.id } });
-              // updateDispatch(nodeId, item.id);
             }}
           >
             {beforeStr}

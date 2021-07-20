@@ -4,21 +4,20 @@ import { Card, InputNumber } from "antd";
 import "./index.css";
 
 export default function Table(props) {
-  let arr = Object.keys(props.obj);
-  console.log('props.obj',props.obj);
-  let obj = props.obj;
-  let componentId = props.componentId;
-  const objId = props.objId;
+  const comopentProperties = Object.keys(props.component);
+  const component = props.component;
+  const componentId = props.componentId;
+  const nodeId = props.nodeId;
   const [value, setValue] = useState(0);
   const [key, setKey] = useState("");
 
-  const handleChange = function (e, itemKey) {
+  const handleChange = function (e, propertyName) {
     setValue(e);
-    setKey(`${itemKey}-${objId}-${componentId}`);
+    setKey(`${propertyName}-${nodeId}-${componentId}`);
   };
 
-  const handleBlur = function (itemKey) {
-    obj[itemKey] = value;
+  const handleBlur = function (propertyName) {
+    component[propertyName] = value;
     console.log(key, value);
     function sendMessageToContentScript(message, callback) {
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -39,20 +38,21 @@ export default function Table(props) {
     setValue(undefined);
   };
   return (
-    <Card key={key} title={obj.name}>
-      {arr
-        .filter((key) => key !== "name")
-        .map((key) => (
-          <div className="tableContentWrapper" key={key}>
-            <span key={key + "key"} className="key">{`${key}`}</span>
-            <span className="propertyInput" key={key + "input"}>
+    <Card key={`${nodeId}-${componentId}`} title={component.name}>
+      {comopentProperties
+        .filter((propertyName) => propertyName !== "name")
+        .map((propertyName) => (
+          <div className="tableContentWrapper" key={propertyName+'wrapper'}>
+            <span key={propertyName + "key"} className="key">{`${propertyName}`}</span>
+            <span className="propertyInput" key={propertyName + "input"}>
               <InputNumber
-                defaultValue={`${obj[key]}`}
-                onChange={(e) => handleChange(e, key)}
+                key={`${propertyName}-${nodeId}-${componentId}`}
+                defaultValue={`${component[propertyName]}`}
+                onChange={(e) => handleChange(e, propertyName)}
                 min={-2000}
                 max={2000}
                 onBlur={(e) => {
-                  handleBlur(key);
+                  handleBlur(propertyName);
                 }}
               />
             </span>

@@ -37,13 +37,13 @@ function App() {
       );
       if (request.sign == "EvaDevtool") {
         sendResponse({ farewell: "index.jsx接收到" });
-        dispatch({ type: CHANGE_NODE_ID, data: { nodeId: 2 } });
         dispatch({
           type: INIT_DEVTOOL,
           data: {
             gData: [request.tree.outliner],
             initComponents: request.tree.nodes[1].components,
             nodes: request.tree.nodes,
+            nodeId: 1
           },
         });
       }

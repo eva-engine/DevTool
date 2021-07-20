@@ -6,12 +6,16 @@ export const CategoryDataContext = createContext({});
 // 相当于之前的 constants
 export const CHANGE_NODE_ID = "changeNodeId";
 export const INIT_DEVTOOL = "initDevTool";
-export const SET_COMPONENTS = 'setComponents';
+export const SET_COMPONENTS = "setComponents";
 
 const reducer = (state, action) => {
   switch (action.type) {
     case CHANGE_NODE_ID:
-      return { ...state, nodeId: action.data.nodeId };
+      return {
+        ...state,
+        nodeId: action.data.nodeId,
+        components: state.nodes[action.data.nodeId].components,
+      };
     case INIT_DEVTOOL:
       return {
         ...state,
@@ -20,10 +24,10 @@ const reducer = (state, action) => {
         gData: action.data.gData,
       };
     case SET_COMPONENTS:
-      return{
-        ...state, 
-        components: action.data.components
-      }
+      return {
+        ...state,
+        components: action.data.components,
+      };
     default:
       return state;
   }
