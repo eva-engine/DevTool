@@ -7,16 +7,19 @@ export const CategoryDataContext = createContext({});
 export const CHANGE_NODE_ID = "changeNodeId";
 export const INIT_DEVTOOL = "initDevTool";
 export const SET_COMPONENTS = "setComponents";
+export const SET_NODES = "setNodes";
 
 const reducer = (state, action) => {
   switch (action.type) {
     case CHANGE_NODE_ID:
+      console.log(77777777)
       return {
         ...state,
         nodeId: action.data.nodeId,
         components: state.nodes[action.data.nodeId].components,
       };
     case INIT_DEVTOOL:
+      console.log(45444)
       return {
         ...state,
         components: action.data.initComponents,
@@ -27,6 +30,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         components: action.data.components,
+      };
+    case SET_NODES:
+      return {
+        ...state,
+        nodes: action.data.nodes,
+        components: action.data.nodes[state.nodeId].components,
       };
     default:
       return state;

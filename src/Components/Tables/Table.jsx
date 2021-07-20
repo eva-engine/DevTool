@@ -10,6 +10,7 @@ export default function Table(props) {
   const nodeId = props.nodeId;
   const [value, setValue] = useState(0);
   const [key, setKey] = useState("");
+// console.log(component, 123)
 
   const handleChange = function (e, propertyName) {
     setValue(e);
@@ -48,6 +49,7 @@ export default function Table(props) {
               <InputNumber
                 key={`${propertyName}-${nodeId}-${componentId}`}
                 defaultValue={`${component[propertyName]}`}
+                value={`${component[propertyName]}`}
                 onChange={(e) => handleChange(e, propertyName)}
                 min={-2000}
                 max={2000}
