@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         let newOutliner = {
           id: obj?.id,
-          key:obj?.id,
+          key: obj?.id,
           title: obj?.name,
           scene: obj?.scene?.id,
           parent: obj?.parent?.id ? obj.parent.id : 0,
@@ -88,29 +88,31 @@ document.addEventListener("DOMContentLoaded", function () {
     let result = transformToNodes(objs);
     console.log("result", result);
     window.postMessage({ result: result }, "*");
-    setInterval(() => {
-      let currentEva = window.$eva;
-      let currentInfo = transformToNodes(currentEva);
-      let nodes = currentInfo.nodes;
-      window.postMessage(
-        {
-          nodes: nodes,
-        },
-        "*"
-      );
-    }, 1000);
+    let setIntervalId;
+    if (window.$eva) {
+      setIntervalId =  setInterval(() => {
+        let currentEva = window.$eva;
+        let currentInfo = transformToNodes(currentEva);
+        let nodes = currentInfo.nodes;
+        window.postMessage(
+          {
+            nodes: nodes,
+          },
+          "*"
+        );
+      }, 1000);
+    }else{
+      clearInterval(setIntervalId);
+    }
     window.addEventListener("message", function (event) {
       // 接受panel.js 借用content.js发送的编辑值，修改页面实例对象的值
       let eventKey = event.data.key;
       const eventValue = event.data.value;
-      console.log('eventKey', eventKey);
-      console.log('eventValue', eventValue);
       if (eventKey) {
-        // console.log("inject", `${eventKey}: ${event.data.value}`);
         let keys = eventKey.split("-");
         const componentKey = keys[0];
         const objId = keys[1] - 1;
-        console.log('objId', objId);
+        console.log("objId", objId);
         const componentId = keys[2];
         if (componentKey.indexOf(".")) {
           let firstAndSecondKey = componentKey.split(".");
@@ -132,7 +134,6 @@ window.addEventListener(
   function (event) {
     if (event.data.result) {
       let result = event.data.result;
-      // console.log("content-script", tree);
       chrome.runtime.sendMessage(
         { sign: "EvaDevtool", tree: result },
         function (response) {
@@ -140,7 +141,7 @@ window.addEventListener(
         }
       );
     }
-    if(event.data.nodes){
+    if (event.data.nodes) {
       let nodes = event.data.nodes;
       chrome.runtime.sendMessage(
         { sign: "Nodes", nodes: nodes },
@@ -153,24 +154,9 @@ window.addEventListener(
   false
 );
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  // console.log(sender.tab ?"from a content script:" + sender.tab.url :"from the extension");
   if (request.cmd == "test") {
-    // alert(`${request.key}: ${request.value}`);
     window.postMessage({ key: request.key, value: request.value });
-    console.log('key', request.key);
+    console.log("key", request.key);
   }
-  console.log('hh');
   sendResponse("hhh");
 });
-
-// chrome.runtime.onConnect.addListener(function(port) {
-// 	console.log(port);
-// 	if(port.name == 'test-connect') {
-// 		port.onMessage.addListener(function(msg) {
-// 			console.log('收到长连接消息：', msg);
-// 			if(msg.question == '你是谁啊？') port.postMessage({answer: '我是你爸！'});
-// 		});
-// 	}
-// });
-
-// 报错 接收端不存在
