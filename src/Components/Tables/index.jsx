@@ -22,7 +22,7 @@ export default function Tables() {
     });
     return () => {};
   }, []);
-console.log(components, 123)
+  
   return components
     ? components.map((item, index) => (
         <Table component={item} componentId={index} nodeId={nodeId} />

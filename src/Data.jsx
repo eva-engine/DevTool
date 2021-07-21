@@ -12,14 +12,12 @@ export const SET_NODES = "setNodes";
 const reducer = (state, action) => {
   switch (action.type) {
     case CHANGE_NODE_ID:
-      console.log(77777777)
       return {
         ...state,
         nodeId: action.data.nodeId,
         components: state.nodes[action.data.nodeId].components,
       };
     case INIT_DEVTOOL:
-      console.log(45444)
       return {
         ...state,
         components: action.data.initComponents,
