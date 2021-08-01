@@ -12,11 +12,7 @@ export default function Tables() {
       sender,
       sendResponse
     ) {
-      console.log(
-        sender.tab ? "来自内容脚本：" + sender.tab.url : "来自扩展程序"
-      );
       if (request.sign == "Nodes") {
-        sendResponse({ farewell: "tables.jsx接收到" });
         dispatch({ type: SET_NODES, data: { nodes: request.nodes } });
       }
     });

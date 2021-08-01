@@ -12,10 +12,17 @@ const globalHook = {
     script.parentNode.removeChild(script);
   },
 };
+function setInspectorEev() {
+  window.__EVA_INSPECTOR_ENV__ = true;
+}
+globalHook.executeInContext(setInspectorEev.toString());
 
 document.addEventListener("DOMContentLoaded", function () {
   function injectedScript(window) {
-    let objs = window.$eva;
+    window.__EVA_INSPECTOR_ENV__ = true;
+
+    let objs = window.__EVA_GAME_INSTANCE__.gameObjects;
+    // let objs = window.game;
     function transformToNodes(objs) {
       let root = {};
       let outlinerNode = {
@@ -28,10 +35,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
       for (let i = 0; i < objs?.length; i++) {
         let obj = objs[i];
-        let filteredComponents = buildWhiteList(obj?.components);
+        let componentsInfoAfterHandle = handleComponentsInfo(obj?.components);
+        
         let componentsInfo = {
           id: obj?.id,
-          components: filteredComponents,
+          components: componentsInfoAfterHandle.componentsInfoAfterFilter,
+          IDEProp: componentsInfoAfterHandle.componentsIDEProp,
+          componetsKeepType: componentsInfoAfterHandle.componentsKeepType
         };
         let newOutliner = {
           id: obj?.id,
@@ -44,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         nodes.push(componentsInfo);
         outliner.push(newOutliner);
       }
+      
       if (outliner.length > 1) {
         for (let i = outliner.length - 1; i > 1; i--) {
           let parent = outliner[i].parent;
@@ -51,23 +62,35 @@ document.addEventListener("DOMContentLoaded", function () {
           parentNode.children.splice(0, 0, outliner[i]);
         }
       }
-      // console.log(nodes[1]);
       return {
         nodes: nodes,
         outliner: outliner[1],
       };
     }
 
-    function buildWhiteList(components) {
-      let res = [];
+    function handleComponentsInfo(components) {
+      let componentsInfoAfterFilter = [];
+      let componentsKeepType = [];
+      let componentsIDEProp = [];
       for (let i = 0; i < components?.length; i++) {
-        if (!components[i].constructor.IDEProps) continue;
-        let whiteList = [...components[i].constructor.IDEProps, "name"];
+        let types = components[i].constructor.IDEProps;
+        if (!types) continue;
+        componentsIDEProp.push(types);
+        let whiteList = ["name"];
+        for (let item in types) {
+          whiteList.push(types[item].key);
+        }
         let component = components[i];
         let objForReact = copyObjForReact(component, whiteList);
-        res.push(objForReact);
+        componentsInfoAfterFilter.push(objForReact);
+        componentsKeepType.push(IDEPropsWithType(component, whiteList));
       }
-      return res;
+      // console.log('IDEPropsType', componentsKeepType);
+      return {
+        componentsInfoAfterFilter,
+        componentsIDEProp,
+        componentsKeepType
+      };
     }
     function copyObjForReact(originObj, whitelist) {
       let temp = {};
@@ -85,13 +108,28 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       return temp;
     }
+    function IDEPropsWithType(originObj, whitelist) {
+      let temp = {};
+      for (let i = 0; i < whitelist.length; i++) {
+        temp[whitelist[i]] = originObj[whitelist[i]];
+      }
+      return temp;
+    }
     let result = transformToNodes(objs);
     console.log("result", result);
+    // console.log(result.nodes[1].IDEProp[0]);
+    // let keys = Object.keys(result.nodes[1].components[0]);
+    // for(let i = 0;i<keys.length;i++){
+    //   let key = keys[i];
+    //   console.log(key)
+    //   console.log(result.nodes[1].IDEProp[0][key]);
+    // }
     window.postMessage({ result: result }, "*");
     let setIntervalId;
-    if (window.$eva) {
-      setIntervalId =  setInterval(() => {
-        let currentEva = window.$eva;
+    let isDevtool = window.__EVA_GAME_INSTANCE__;
+    if (isDevtool) {
+      setIntervalId = setInterval(() => {
+        let currentEva = window.__EVA_GAME_INSTANCE__.gameObjects;
         let currentInfo = transformToNodes(currentEva);
         let nodes = currentInfo.nodes;
         window.postMessage(
@@ -101,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "*"
         );
       }, 1000);
-    }else{
+    } else {
       clearInterval(setIntervalId);
     }
     window.addEventListener("message", function (event) {
@@ -118,15 +156,22 @@ document.addEventListener("DOMContentLoaded", function () {
           let firstAndSecondKey = componentKey.split(".");
           const firstKey = firstAndSecondKey[0];
           const secondKey = firstAndSecondKey[1];
-          window.$eva[objId].components[componentId][firstKey][secondKey] =
-            eventValue;
+          window.__EVA_GAME_INSTANCE__.gameObjects[objId].components[
+            componentId
+          ][firstKey][secondKey] = eventValue;
+          // window.game[objId].components[componentId][firstKey][secondKey] =
+          //   eventValue;
         } else {
-          window.$eva[objId].components[componentId][componentKey] = eventValue;
+          window.__EVA_GAME_INSTANCE__.gameObjects[objId].components[
+            componentId
+          ][componentKey] = eventValue;
+          // window.game[objId].components[componentId][componentKey] = eventValue;
         }
       }
     });
   }
   const code = injectedScript.toString();
+  // if(window.__EVA_GAME_INSTANCE__ === true){globalHook.executeInContext(code);}
   globalHook.executeInContext(code);
 });
 window.addEventListener(
