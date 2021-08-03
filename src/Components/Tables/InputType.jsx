@@ -3,13 +3,13 @@ import React from "react";
 import { InputNumber, Switch, Input } from "antd";
 
 export default function InputType(props) {
-  const [type, keyProp, value] = props;
+  const [type, keyProp, value,id] = props;
   switch (type) {
     case "number":
       return (
         <>
           <div>{keyProp}</div>
-          <InputNumber defaultValue={value} value={value} />
+          <InputNumber defaultValue={value} value={value} key={id} />
         </>
       );
     case "vector2":

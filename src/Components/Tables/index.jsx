@@ -4,7 +4,7 @@ import { CategoryDataContext, SET_NODES } from "../../Data";
 import "./index.css";
 export default function Tables() {
   const { data, dispatch } = useContext(CategoryDataContext);
-  const { nodeId, components } = data;
+  const { nodeId, components, componentsKeepType, IDEProp } = data;
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener(function (
@@ -18,10 +18,16 @@ export default function Tables() {
     });
     return () => {};
   }, []);
-  
+
   return components
     ? components.map((item, index) => (
-        <Table component={item} componentId={index} nodeId={nodeId} />
+        <Table
+          component={item}
+          componentId={index}
+          nodeId={nodeId}
+          componentsKeepType={componentsKeepType}
+          IDEProp = {IDEProp}
+        />
       ))
     : null;
 }

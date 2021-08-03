@@ -34,6 +34,8 @@ const reducer = (state, action) => {
         ...state,
         nodes: action.data.nodes,
         components: action.data.nodes[state.nodeId].components,
+        componentsKeepType: action.data.nodes[state.nodeId].componetsKeepType,
+        IDEProp: action.data.nodes[state.nodeId].IDEProp,
       };
     default:
       return state;

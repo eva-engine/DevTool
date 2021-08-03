@@ -8,6 +8,10 @@ export default function Table(props) {
   const component = props.component;
   const componentId = props.componentId;
   const nodeId = props.nodeId;
+  const componentsKeepType = props.componentsKeepType;
+  const IDEProp = props.IDEProp;
+  console.log('componentsKeepType',props);
+  console.log('IDE',IDEProp);
   const [value, setValue] = useState(0);
   const [key, setKey] = useState("");
   // console.log(component, 123)

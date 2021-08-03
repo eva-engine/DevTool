@@ -36,12 +36,12 @@ document.addEventListener("DOMContentLoaded", function () {
       for (let i = 0; i < objs?.length; i++) {
         let obj = objs[i];
         let componentsInfoAfterHandle = handleComponentsInfo(obj?.components);
-        
+
         let componentsInfo = {
           id: obj?.id,
           components: componentsInfoAfterHandle.componentsInfoAfterFilter,
           IDEProp: componentsInfoAfterHandle.componentsIDEProp,
-          componetsKeepType: componentsInfoAfterHandle.componentsKeepType
+          componetsKeepType: componentsInfoAfterHandle.componentsKeepType,
         };
         let newOutliner = {
           id: obj?.id,
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         nodes.push(componentsInfo);
         outliner.push(newOutliner);
       }
-      
+
       if (outliner.length > 1) {
         for (let i = outliner.length - 1; i > 1; i--) {
           let parent = outliner[i].parent;
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return {
         componentsInfoAfterFilter,
         componentsIDEProp,
-        componentsKeepType
+        componentsKeepType,
       };
     }
     function copyObjForReact(originObj, whitelist) {
@@ -171,8 +171,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   const code = injectedScript.toString();
-  // if(window.__EVA_GAME_INSTANCE__ === true){globalHook.executeInContext(code);}
-  globalHook.executeInContext(code);
+    globalHook.executeInContext(code);
+  // globalHook.executeInContext(code);
 });
 window.addEventListener(
   "message",
