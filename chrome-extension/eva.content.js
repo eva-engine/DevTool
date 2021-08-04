@@ -113,11 +113,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     function IDEPropsWithType(originObj, whitelist, componentIDEProp) {
       let temp = {};
+      temp["name"] = originObj["name"];
       for (let i = 1; i < whitelist.length; i++) {
         let prop = whitelist[i];
-        temp[prop] = originObj[prop]
+        temp[prop] = originObj[prop];
         // {
-        //   ...originObj[prop],
+        //   value: originObj[prop],
         //   type: componentIDEProp[prop].type,
         // };
       }

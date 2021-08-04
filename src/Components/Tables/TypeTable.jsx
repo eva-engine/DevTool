@@ -11,9 +11,9 @@ export default function TypeTable(props) {
   const { IDEProp } = data;
 
   const comopentProperties = Object.keys(props.component);
-//   const component = props.component;
+  const component = props.component;
   const componentId = props.componentId;
-  const component = componentKeepType[componentId];
+  // const component = componentKeepType[componentId];
   const nodeId = props.nodeId;
   const [value, setValue] = useState(0);
   const [key, setKey] = useState("");
@@ -46,7 +46,7 @@ export default function TypeTable(props) {
     // }</div>
     <Card
       key={`${nodeId}-${componentId}`}
-      title={component[comopentProperties[0]]}
+      title={component["name"]}
     >
       {comopentProperties
         .filter((propertyName) => propertyName !== "name")
