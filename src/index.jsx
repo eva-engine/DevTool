@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect} from "react";
 import ReactDOM from "react-dom";
 import { Row, Col } from "antd";
 import "antd/dist/antd.css";
@@ -54,11 +54,11 @@ function App() {
   return (
     <>
       <Row>
-        <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Col xs={8} sm={8} md={8} lg={8} xl={8}>
           <SearchTree />
         </Col>
         <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
-        <Col xs={11} sm={11} md={11} lg={11} xl={11}>
+        <Col xs={15} sm={15} md={15} lg={15} xl={15}>
           <Tables className="tables" />
         </Col>
       </Row>

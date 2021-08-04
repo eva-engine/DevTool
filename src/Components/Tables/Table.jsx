@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { Card, InputNumber } from "antd";
 
 import "./index.css";
 
 export default function Table(props) {
+
+  // onlyNumber时的属性名和组件信息
   const comopentProperties = Object.keys(props.component);
   const component = props.component;
+
   const componentId = props.componentId;
   const nodeId = props.nodeId;
-  const componentsKeepType = props.componentsKeepType;
-  const IDEProp = props.IDEProp;
-  console.log('componentsKeepType',props);
-  console.log('IDE',IDEProp);
   const [value, setValue] = useState(0);
   const [key, setKey] = useState("");
   // console.log(component, 123)
@@ -39,29 +38,8 @@ export default function Table(props) {
     );
   };
 
-  const handleBlur = function (propertyName) {
-    // component[propertyName] = value;
-    // console.log(key, value);
-    // function sendMessageToContentScript(message, callback) {
-    //   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    //     chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
-    //       if (callback) callback(response);
-    //     });
-    //   });
-    // }
-    // if (value && key) {
-    //   sendMessageToContentScript(
-    //     { cmd: "test", key: key, value: value },
-    //     function (response) {
-    //       console.log("来自content回复：" + response);
-    //     }
-    //   );
-    // // }
-    // setKey("");
-    // setValue(undefined);
-  };
   return (
-    <Card key={`${nodeId}-${componentId}`} title={component.name}>
+    <Card key={`${nodeId}-${componentId}`} title={component["name"]}>
       {comopentProperties
         .filter((propertyName) => propertyName !== "name")
         .map((propertyName) => (
@@ -76,11 +54,6 @@ export default function Table(props) {
                 defaultValue={`${component[propertyName]}`}
                 value={`${component[propertyName]}`}
                 onChange={(e) => handleChange(e, propertyName)}
-                min={-2000}
-                max={2000}
-                onBlur={(e) => {
-                  handleBlur(propertyName);
-                }}
               />
             </span>
           </div>

@@ -83,7 +83,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let component = components[i];
         let objForReact = copyObjForReact(component, whiteList);
         componentsInfoAfterFilter.push(objForReact);
-        componentsKeepType.push(IDEPropsWithType(component, whiteList));
+        // console.log('IDEProp',componentsIDEProp[i]);
+        componentsKeepType.push(
+          IDEPropsWithType(component, whiteList, componentsIDEProp[i])
+        );
       }
       // console.log('IDEPropsType', componentsKeepType);
       return {
@@ -108,10 +111,15 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       return temp;
     }
-    function IDEPropsWithType(originObj, whitelist) {
+    function IDEPropsWithType(originObj, whitelist, componentIDEProp) {
       let temp = {};
-      for (let i = 0; i < whitelist.length; i++) {
-        temp[whitelist[i]] = originObj[whitelist[i]];
+      for (let i = 1; i < whitelist.length; i++) {
+        let prop = whitelist[i];
+        temp[prop] = originObj[prop]
+        // {
+        //   ...originObj[prop],
+        //   type: componentIDEProp[prop].type,
+        // };
       }
       return temp;
     }
@@ -171,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   const code = injectedScript.toString();
-    globalHook.executeInContext(code);
+  globalHook.executeInContext(code);
   // globalHook.executeInContext(code);
 });
 window.addEventListener(

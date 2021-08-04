@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import Table from "./Table";
+import TypeTable from "./TypeTable";
 import { CategoryDataContext, SET_NODES } from "../../Data";
 import "./index.css";
 export default function Tables() {
@@ -19,15 +20,17 @@ export default function Tables() {
     return () => {};
   }, []);
 
-  return components
-    ? components.map((item, index) => (
-        <Table
-          component={item}
-          componentId={index}
-          nodeId={nodeId}
-          componentsKeepType={componentsKeepType}
-          IDEProp = {IDEProp}
-        />
+  return componentsKeepType
+    ? componentsKeepType.map((item, index) => (
+        <TypeTable 
+        component={item} 
+        componentId={index} nodeId={nodeId} />
       ))
     : null;
+
+  // return components
+  //   ? components.map((item, index) => (
+  //       <Table component={item} componentId={index} nodeId={nodeId} />
+  //     ))
+  //   : null;
 }

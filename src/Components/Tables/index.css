@@ -35,3 +35,10 @@ input {
 .propertyInput{
   padding-left: 10px;
 }
+
+.ant-input-number{
+  width: 60px;
+}
+.propertyY{
+  margin-left: 5px;
+}
