@@ -11,7 +11,7 @@ export default function TypeTable(props) {
   const nodeId = props.nodeId;
   const [value, setValue] = useState(0);
   const [key, setKey] = useState("");
-  const handleChange = function (value, propertyName, secondKey) {
+  const handleChange = function (value, propertyName, secondKey=null) {
     setValue(value);
     if (secondKey) {
       component[propertyName]["value"][secondKey] = value;
@@ -102,7 +102,7 @@ export default function TypeTable(props) {
                     value={component[propertyName].value.width}
                     onChange={(value) => handleChange(value, propertyName, "width")}
                   />
-                  <span className="propertyX">height: </span>
+                  <span className="propertyY">height:{" "}</span>
                   <InputNumber
                     key={`${propertyName}.height-${nodeId}-${componentId}`}
                     defaultValue={`${component[propertyName].value.height}`}

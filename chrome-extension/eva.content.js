@@ -116,11 +116,12 @@ document.addEventListener("DOMContentLoaded", function () {
       temp["name"] = originObj["name"];
       for (let i = 1; i < whitelist.length; i++) {
         let prop = whitelist[i];
-        // temp[prop] = originObj[prop];
-        temp[prop] = originObj[prop]?{
-          value: originObj[prop],
-          type: componentIDEProp[prop].type,
-        }:undefined;
+        temp[prop] = originObj[prop]
+          ? {
+              value: originObj[prop],
+              type: componentIDEProp[prop].type,
+            }
+          : undefined;
       }
       return temp;
     }
@@ -161,15 +162,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const objId = keys[1] - 1;
         console.log("objId", objId);
         const componentId = keys[2];
-        if (componentKey.indexOf(".")) {
+        if (componentKey.indexOf(".") > 0) {
           let firstAndSecondKey = componentKey.split(".");
           const firstKey = firstAndSecondKey[0];
           const secondKey = firstAndSecondKey[1];
           window.__EVA_GAME_INSTANCE__.gameObjects[objId].components[
             componentId
           ][firstKey][secondKey] = eventValue;
-          // window.game[objId].components[componentId][firstKey][secondKey] =
-          //   eventValue;
         } else {
           window.__EVA_GAME_INSTANCE__.gameObjects[objId].components[
             componentId
