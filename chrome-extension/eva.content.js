@@ -116,11 +116,11 @@ document.addEventListener("DOMContentLoaded", function () {
       temp["name"] = originObj["name"];
       for (let i = 1; i < whitelist.length; i++) {
         let prop = whitelist[i];
-        temp[prop] = originObj[prop];
-        // {
-        //   value: originObj[prop],
-        //   type: componentIDEProp[prop].type,
-        // };
+        // temp[prop] = originObj[prop];
+        temp[prop] = originObj[prop]?{
+          value: originObj[prop],
+          type: componentIDEProp[prop].type,
+        }:undefined;
       }
       return temp;
     }

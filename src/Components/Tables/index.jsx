@@ -1,12 +1,10 @@
 import React, { useContext, useEffect } from "react";
-import Table from "./Table";
 import TypeTable from "./TypeTable";
-import MutipleType from './MutipleType'
 import { CategoryDataContext, SET_NODES } from "../../Data";
 import "./index.css";
 export default function Tables() {
   const { data, dispatch } = useContext(CategoryDataContext);
-  const { nodeId, components, componentsKeepType, IDEProp } = data;
+  const { nodeId, componentsKeepType } = data;
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener(function (
@@ -20,14 +18,6 @@ export default function Tables() {
     });
     return () => {};
   }, []);
-  // return componentsKeepType
-  //   ? componentsKeepType.map((item, index) => (
-  //       <MutipleType
-  //       component={item} 
-  //       componentId={index} nodeId={nodeId} />
-  //     ))
-  //   : null;
-
   return componentsKeepType
     ? componentsKeepType.map((item, index) => (
         <TypeTable 
@@ -35,10 +25,4 @@ export default function Tables() {
         componentId={index} nodeId={nodeId} />
       ))
     : null;
-
-  // return components
-  //   ? components.map((item, index) => (
-  //       <Table component={item} componentId={index} nodeId={nodeId} />
-  //     ))
-  //   : null;
 }
