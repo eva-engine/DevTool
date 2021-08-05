@@ -69,6 +69,7 @@ export default function TypeTable(props) {
                     defaultValue={`${component[propertyName].value.y}`}
                     value={component[propertyName].value.x}
                     onChange={(value) => handleChange(value, propertyName, "x")}
+                    step = {component[propertyName]?.step}
                   />
                   <span className="propertyY">y: </span>
                   <InputNumber
@@ -76,6 +77,7 @@ export default function TypeTable(props) {
                     defaultValue={`${component[propertyName].value.y}`}
                     value={component[propertyName].value.y}
                     onChange={(value) => handleChange(value, propertyName, "y")}
+                    step = {component[propertyName]?.step}
                   />
                 </>
               ) : component[propertyName].type === "number" ? (
@@ -84,6 +86,7 @@ export default function TypeTable(props) {
                   defaultValue={`${component[propertyName].value}`}
                   value={component[propertyName].value}
                   onChange={(value) => handleChange(value, propertyName)}
+                  step = {component[propertyName]?.step}
                 />
               ) : component[propertyName].type === "boolean" ? (
                 <Switch
@@ -101,6 +104,7 @@ export default function TypeTable(props) {
                     defaultValue={`${component[propertyName].value.width}`}
                     value={component[propertyName].value.width}
                     onChange={(value) => handleChange(value, propertyName, "width")}
+                    step = {component[propertyName]?.step}
                   />
                   <span className="propertyY">height:{" "}</span>
                   <InputNumber
@@ -108,6 +112,7 @@ export default function TypeTable(props) {
                     defaultValue={`${component[propertyName].value.height}`}
                     value={component[propertyName].value.height}
                     onChange={(value) => handleChange(value, propertyName, "height")}
+                    step = {component[propertyName]?.step}
                   />
                 </>
               ) : (
