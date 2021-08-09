@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Card, InputNumber, Input, Switch } from "antd";
-// import InputVector from "./InputVector2";
 import "./index.css";
 
 export default function TypeTable(props) {
