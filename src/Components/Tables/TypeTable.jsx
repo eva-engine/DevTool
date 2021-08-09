@@ -8,6 +8,7 @@ export default function TypeTable(props) {
   const componentId = props.componentId;
   const nodeId = props.nodeId;
   const [value, setValue] = useState(0);
+
   const sendMessageToContentScript = function (message, callback) {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
@@ -15,6 +16,7 @@ export default function TypeTable(props) {
       });
     });
   };
+
   const sendKeyAndValue = function (key, value) {
     sendMessageToContentScript(
       {
@@ -27,6 +29,7 @@ export default function TypeTable(props) {
       }
     );
   };
+
   const handleChange = function (inputValue, propertyName, secondKey = null) {
     // 此处添加setValue数值更改更丝滑
     setValue(inputValue);
@@ -42,12 +45,14 @@ export default function TypeTable(props) {
       sendKeyAndValue(`${propertyName}-${nodeId}-${componentId}`, inputValue);
     }
   };
+
   const handleBooleanChange = function (inputValue, propertyName) {
     setValue(inputValue);
     component[propertyName]["value"] = inputValue;
     sendKeyAndValue(`${propertyName}-${nodeId}-${componentId}`, inputValue);
   };
-  const typeInput = function (propertyName, perciseKey) {
+
+  const buildInputItemByType = function (propertyName, perciseKey) {
     if (perciseKey) {
       return {
         key: `${propertyName}.${perciseKey}-${nodeId}-${componentId}`,
@@ -67,6 +72,34 @@ export default function TypeTable(props) {
     }
   };
 
+  const buildInputByType = function (type, propertyName) {
+    return type === "vector2" ? (
+      <>
+        <span className="propertyX">x: </span>
+        <InputNumber {...buildInputItemByType(propertyName, "x")} />
+        <span className="propertyY">y: </span>
+        <InputNumber {...buildInputItemByType(propertyName, "y")} />
+      </>
+    ) : type === "number" ? (
+      <InputNumber {...buildInputItemByType(propertyName)} />
+    ) : type === "boolean" ? (
+      <Switch
+        defaultChecked
+        key={`${propertyName}-${nodeId}-${componentId}`}
+        onChange={(value) => handleBooleanChange(value, propertyName)}
+      />
+    ) : type === "size" ? (
+      <>
+        <span className="propertyX">width: </span>
+        <InputNumber {...buildInputItemByType(propertyName, "width")} />
+        <span className="propertyY">height: </span>
+        <InputNumber {...buildInputItemByType(propertyName, "height")} />
+      </>
+    ) : (
+      <Input {...buildInputItemByType(propertyName)} />
+    );
+  };
+
   return (
     <Card key={`${nodeId}-${componentId}`} title={component["name"]}>
       {comopentProperties
@@ -81,39 +114,7 @@ export default function TypeTable(props) {
               className="key"
             >{`${propertyName}`}</span>
             <span className="propertyInput" key={propertyName + "input"}>
-              {component[propertyName].type === "vector2" ? (
-                <>
-                  <span className="propertyX">x: </span>
-                  <InputNumber {...typeInput(propertyName, "x")} />
-                  <span className="propertyY">y: </span>
-                  <InputNumber {...typeInput(propertyName, "y")} />
-                </>
-              ) : component[propertyName].type === "number" ? (
-                <InputNumber
-                  {...typeInput(propertyName)}
-                />
-              ) : component[propertyName].type === "boolean" ? (
-                <Switch
-                  defaultChecked
-                  key={`${propertyName}-${nodeId}-${componentId}`}
-                  onChange={(value) => handleBooleanChange(value, propertyName)}
-                />
-              ) : component[propertyName].type === "size" ? (
-                <>
-                  <span className="propertyX">width: </span>
-                  <InputNumber
-                    {...typeInput(propertyName,"width")}
-                  />
-                  <span className="propertyY">height: </span>
-                  <InputNumber
-                    {...typeInput(propertyName,"height")}
-                  />
-                </>
-              ) : (
-                <Input
-                  {...typeInput(propertyName)}
-                />
-              )}
+              {buildInputByType(component[propertyName].type, propertyName)}
             </span>
           </div>
         ))}

@@ -1,7 +1,7 @@
 body {
   background-color: #333;
 }
-.tableContentWrapper{
+.tableContentWrapper {
   margin: 5px;
 }
 .tableName {
@@ -27,18 +27,21 @@ input {
   padding: 5px;
   border-radius: 3px;
 }
+.tableContentItemWrapper{
+  margin: 2px 0 2px 0;
+}
 .key {
   /* color: #fcfff4; */
   color: #000;
   font-size: 15px;
 }
-.propertyInput{
+.propertyInput {
   padding-left: 10px;
 }
 
-.ant-input-number{
+.ant-input-number {
   width: 60px;
 }
-.propertyY{
+.propertyY {
   margin-left: 5px;
 }

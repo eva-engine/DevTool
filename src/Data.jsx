@@ -37,11 +37,6 @@ const reducer = (state, action) => {
         componentsKeepType: action.data.nodes[state.nodeId].componetsKeepType,
       };
     case SET_OUTLINER:
-      console.log({
-        ...state,
-        gData: action.data.outliner,
-        nodes: action.data.nodes
-      })
       return {
         ...state,
         gData: action.data.outliner,
