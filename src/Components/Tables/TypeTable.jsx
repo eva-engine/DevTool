@@ -1,7 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Card, InputNumber, Input, Switch } from "antd";
-import { CategoryDataContext } from "../../Data";
-
+// import InputVector from "./InputVector2";
 import "./index.css";
 
 export default function TypeTable(props) {
@@ -49,12 +48,35 @@ export default function TypeTable(props) {
     component[propertyName]["value"] = inputValue;
     sendKeyAndValue(`${propertyName}-${nodeId}-${componentId}`, inputValue);
   };
+  const typeInput = function (propertyName, perciseKey) {
+    if (perciseKey) {
+      return {
+        key: `${propertyName}.${perciseKey}-${nodeId}-${componentId}`,
+        defaultValue: `${component[propertyName].value[perciseKey]}`,
+        value: component[propertyName].value[perciseKey],
+        onChange: (value) => handleChange(value, propertyName, perciseKey),
+        step: component[propertyName]?.step,
+      };
+    } else {
+      return {
+        key: `${propertyName}-${nodeId}-${componentId}`,
+        defaultValue: `${component[propertyName].value}`,
+        value: component[propertyName].value,
+        onChange: (value) => handleChange(value, propertyName),
+        step: component[propertyName]?.step,
+      };
+    }
+  };
+
   return (
     <Card key={`${nodeId}-${componentId}`} title={component["name"]}>
       {comopentProperties
         .filter((propertyName) => propertyName !== "name")
         .map((propertyName) => (
-          <div className="tableContentWrapper" key={propertyName + "wrapper"}>
+          <div
+            className="tableContentItemWrapper"
+            key={propertyName + "wrapper"}
+          >
             <span
               key={propertyName + "key"}
               className="key"
@@ -63,29 +85,13 @@ export default function TypeTable(props) {
               {component[propertyName].type === "vector2" ? (
                 <>
                   <span className="propertyX">x: </span>
-                  <InputNumber
-                    key={`${propertyName}.x-${nodeId}-${componentId}`}
-                    defaultValue={`${component[propertyName].value.x}`}
-                    value={component[propertyName].value.x}
-                    onChange={(value) => handleChange(value, propertyName, "x")}
-                    step={component[propertyName]?.step}
-                  />
+                  <InputNumber {...typeInput(propertyName, "x")} />
                   <span className="propertyY">y: </span>
-                  <InputNumber
-                    key={`${propertyName}.y-${nodeId}-${componentId}`}
-                    defaultValue={`${component[propertyName].value.y}`}
-                    value={component[propertyName].value.y}
-                    onChange={(value) => handleChange(value, propertyName, "y")}
-                    step={component[propertyName]?.step}
-                  />
+                  <InputNumber {...typeInput(propertyName, "y")} />
                 </>
               ) : component[propertyName].type === "number" ? (
                 <InputNumber
-                  key={`${propertyName}-${nodeId}-${componentId}`}
-                  defaultValue={`${component[propertyName].value}`}
-                  value={component[propertyName].value}
-                  onChange={(value) => handleChange(value, propertyName)}
-                  step={component[propertyName]?.step}
+                  {...typeInput(propertyName)}
                 />
               ) : component[propertyName].type === "boolean" ? (
                 <Switch
@@ -97,31 +103,16 @@ export default function TypeTable(props) {
                 <>
                   <span className="propertyX">width: </span>
                   <InputNumber
-                    key={`${propertyName}.width-${nodeId}-${componentId}`}
-                    defaultValue={`${component[propertyName].value.width}`}
-                    value={component[propertyName].value.width}
-                    onChange={(value) =>
-                      handleChange(value, propertyName, "width")
-                    }
-                    step={component[propertyName]?.step}
+                    {...typeInput(propertyName,"width")}
                   />
                   <span className="propertyY">height: </span>
                   <InputNumber
-                    key={`${propertyName}.height-${nodeId}-${componentId}`}
-                    defaultValue={`${component[propertyName].value.height}`}
-                    value={component[propertyName].value.height}
-                    onChange={(value) =>
-                      handleChange(value, propertyName, "height")
-                    }
-                    step={component[propertyName]?.step}
+                    {...typeInput(propertyName,"height")}
                   />
                 </>
               ) : (
                 <Input
-                  key={`${propertyName}-${nodeId}-${componentId}`}
-                  defaultValue={`${component[propertyName].value}`}
-                  value={component[propertyName].value}
-                  onChange={(value) => handleChange(value, propertyName)}
+                  {...typeInput(propertyName)}
                 />
               )}
             </span>
