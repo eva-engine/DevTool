@@ -5,16 +5,22 @@ const globalHook = {
     document.documentElement.appendChild(script);
     script.parentNode.removeChild(script);
   },
+  sendMessageToPanelJS(sign, name, value) {
+    chrome.runtime.sendMessage(
+      { sign: sign, [name]: value },
+      function (response) {
+        console.log(response.farewell);
+      }
+    );
+  },
 };
-function setInspectorEev() {
+function setInspectorEev(window) {
   window.__EVA_INSPECTOR_ENV__ = true;
 }
 globalHook.executeInContext(setInspectorEev.toString());
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("getGame", function () {
   function injectedScript(window) {
-    window.__EVA_INSPECTOR_ENV__ = true;
-
     const util = {
       transformToNodes(objs) {
         let root = {};
@@ -31,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
           const componentsKeepType = util.handleComponentsInfo(obj?.components);
 
           const componentsInfo = {
-            id: obj?.id,
             componetsKeepType: componentsKeepType,
           };
           const newOutliner = {
@@ -42,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
             parent: obj?.parent?.id ? obj.parent.id : 0,
             children: [],
           };
-          nodes.push(componentsInfo);
+          nodes[obj?.id] = componentsInfo;
           outliner.push(newOutliner);
         }
 
@@ -107,32 +112,48 @@ document.addEventListener("DOMContentLoaded", function () {
           ][componentKey] = eventValue;
         }
       },
+      refreshAllInfo() {
+        const setIntervalId = setInterval(() => {
+          const currentEvaInstance = window.__EVA_GAME_INSTANCE__.gameObjects;
+          const currentInstanceInfo = util.transformToNodes(currentEvaInstance);
+          window.postMessage(
+            {
+              instance: currentInstanceInfo,
+            },
+            "*"
+          );
+        }, 1000);
+        return setIntervalId;
+      },
       refreshNodesInfo() {
         const setIntervalId = setInterval(() => {
-            const currentEvaInstance = window.__EVA_GAME_INSTANCE__.gameObjects;
-            const currentInstanceInfo =
-              util.transformToNodes(currentEvaInstance);
-            const currentNodesInfo = currentInstanceInfo.nodes;
-            window.postMessage(
-              {
-                nodes: currentNodesInfo,
-              },
-              "*"
-            );
-          }, 1000);
+          const currentEvaInstance = window.__EVA_GAME_INSTANCE__.gameObjects;
+          const currentInstanceInfo = util.transformToNodes(currentEvaInstance);
+          const currentNodesInfo = currentInstanceInfo.nodes;
+          window.postMessage(
+            {
+              nodes: currentNodesInfo,
+            },
+            "*"
+          );
+        }, 1000);
         return setIntervalId;
       },
       initEvaInstanceInfo() {
         const evaGameObjects = window.__EVA_GAME_INSTANCE__.gameObjects;
+        // console.log('gameObjects',evaGameObjects);
         const result = util.transformToNodes(evaGameObjects);
+        console.log("result", result);
         window.postMessage({ result: result }, "*");
       },
     };
     const evaInstanceExist = window.__EVA_GAME_INSTANCE__;
-    let clearIntervalId;
+    let nodesIntervalId;
+    let allIntervalId;
     if (evaInstanceExist) {
       util.initEvaInstanceInfo();
-      clearIntervalId = util.refreshNodesInfo();
+      nodesIntervalId = util.refreshNodesInfo();
+      allIntervalId = util.refreshAllInfo();
 
       window.addEventListener("message", function (event) {
         let eventKey = event.data.key;
@@ -141,8 +162,9 @@ document.addEventListener("DOMContentLoaded", function () {
           util.modifyEvaInstanceValue(eventKey, eventValue);
         }
       });
-    }else{
-      clearInterval(clearIntervalId);
+    } else {
+      clearInterval(nodesIntervalId);
+      clearInterval(allIntervalId);
     }
   }
   const code = injectedScript.toString();
@@ -153,21 +175,15 @@ window.addEventListener(
   function (event) {
     const result = event.data.result;
     if (result) {
-      chrome.runtime.sendMessage(
-        { sign: "EvaDevtool", tree: result },
-        function (response) {
-          console.log(response.farewell);
-        }
-      );
+      globalHook.sendMessageToPanelJS("EvaDevtool", "tree", result);
     }
     const nodes = event.data.nodes;
     if (nodes) {
-      chrome.runtime.sendMessage(
-        { sign: "Nodes", nodes: nodes },
-        function (response) {
-          console.log(response.farewell);
-        }
-      );
+      globalHook.sendMessageToPanelJS("Nodes", "nodes", nodes);
+    }
+    const instance = event.data.instance;
+    if (instance) {
+      globalHook.sendMessageToPanelJS("Instance", "instance", instance);
     }
   },
   false

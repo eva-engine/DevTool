@@ -1,31 +1,15 @@
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Row, Col } from "antd";
 import "antd/dist/antd.css";
 
 import SearchTree from "./Components/SearchTree/index";
 import Tables from "./Components/Tables/index";
-import Data, {
-  CategoryDataContext,
-  INIT_DEVTOOL,
-  CHANGE_NODE_ID,
-} from "./Data";
+import Data, { CategoryDataContext, INIT_DEVTOOL, SET_OUTLINER } from "./Data";
 
 function App() {
-  const { dispatch } = useContext(CategoryDataContext);
-  // const obj = [
-  //   {
-  //     "position.x": "0",
-  //     "position.y": "0",
-  //     name: "Transform",
-  //   },
-  //   {
-  //     "position.x": "0",
-  //     "position.y": "0",
-  //     name: "ninePatch",
-  //   },
-  // ];
-
+  const { data, dispatch } = useContext(CategoryDataContext);
+  const { gData } = data;
   useEffect(() => {
     chrome.runtime.onMessage.addListener(function (
       request,
@@ -41,9 +25,9 @@ function App() {
           type: INIT_DEVTOOL,
           data: {
             gData: [request.tree.outliner],
-            initComponents: request.tree.nodes[1].components,
+            initComponents: request.tree.nodes[1].componentsKeepType,
             nodes: request.tree.nodes,
-            nodeId: 1
+            nodeId: 1,
           },
         });
       }

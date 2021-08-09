@@ -3,7 +3,7 @@ import { Tree, Input } from "antd";
 import "antd/dist/antd.css";
 
 import { getParentKey } from "./util";
-import { CategoryDataContext,CHANGE_NODE_ID } from "../../Data";
+import { CategoryDataContext, CHANGE_NODE_ID, SET_OUTLINER } from "../../Data";
 import "./index.css";
 
 const { Search } = Input;
@@ -19,7 +19,6 @@ const generateList = (data) => {
     }
   }
 };
-
 export default function SearchTree() {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -35,7 +34,7 @@ export default function SearchTree() {
   const onChange = (e) => {
     const { value } = e.target;
     const expandedKeys = dataList
-      .map((item) => {
+      ?.map((item) => {
         if (item.title.indexOf(value) > -1) {
           return getParentKey(item.key, gData);
         }
@@ -46,16 +45,34 @@ export default function SearchTree() {
     setSearchValue(value);
     setAutoExpandParent(true);
   };
+  useEffect(() => {
+    chrome.runtime.onMessage.addListener(function (
+      request,
+      sender,
+      sendResponse
+    ) {
+      if (request.sign == "Instance") {
+        dispatch({
+          type: SET_OUTLINER,
+          data: {
+            outliner: [request.instance.outliner],
+            nodes: request.instance.nodes,
+          },
+        });
+      }
+    });
+    return () => {};
+  }, []);
 
   useEffect(() => {
     generateList(gData);
   }, []);
 
   const loop = (data) =>
-    data.map((item) => {
-      const index = item.title.indexOf(searchValue);
-      const beforeStr = item.title.substr(0, index);
-      const afterStr = item.title.substr(index + searchValue.length);
+    data?.map((item) => {
+      const index = item.title?.indexOf(searchValue);
+      const beforeStr = item.title?.substr(0, index);
+      const afterStr = item.title?.substr(index + searchValue.length);
       const title =
         index > -1 ? (
           <span

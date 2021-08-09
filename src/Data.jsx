@@ -8,6 +8,7 @@ export const CHANGE_NODE_ID = "changeNodeId";
 export const INIT_DEVTOOL = "initDevTool";
 export const SET_COMPONENTS = "setComponents";
 export const SET_NODES = "setNodes";
+export const SET_OUTLINER = "setOutliner";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -15,12 +16,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         nodeId: action.data.nodeId,
-        components: state.nodes[action.data.nodeId].components,
+        componentsKeepType: state.nodes[action.data.nodeId].componentsKeepType,
       };
     case INIT_DEVTOOL:
       return {
         ...state,
-        components: action.data.initComponents,
+        componentsKeepType: action.data.initComponents,
         nodes: action.data.nodes,
         gData: action.data.gData,
       };
@@ -33,9 +34,18 @@ const reducer = (state, action) => {
       return {
         ...state,
         nodes: action.data.nodes,
-        components: action.data.nodes[state.nodeId].components,
         componentsKeepType: action.data.nodes[state.nodeId].componetsKeepType,
-        IDEProp: action.data.nodes[state.nodeId].IDEProp,
+      };
+    case SET_OUTLINER:
+      console.log({
+        ...state,
+        gData: action.data.outliner,
+        nodes: action.data.nodes
+      })
+      return {
+        ...state,
+        gData: action.data.outliner,
+        nodes: action.data.nodes
       };
     default:
       return state;

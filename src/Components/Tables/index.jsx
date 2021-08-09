@@ -14,6 +14,7 @@ export default function Tables() {
     ) {
       if (request.sign == "Nodes") {
         dispatch({ type: SET_NODES, data: { nodes: request.nodes } });
+        // sendResponse({ farewell: "Tables" });
       }
     });
     return () => {};
@@ -25,4 +26,5 @@ export default function Tables() {
         componentId={index} nodeId={nodeId} />
       ))
     : null;
+
 }

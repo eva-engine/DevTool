@@ -10,41 +10,46 @@ export default function TypeTable(props) {
   const componentId = props.componentId;
   const nodeId = props.nodeId;
   const [value, setValue] = useState(0);
-  const [key, setKey] = useState("");
-  const handleChange = function (value, propertyName, secondKey=null) {
-    setValue(value);
-    if (secondKey) {
-      component[propertyName]["value"][secondKey] = value;
-      sendKey(`${propertyName}.${secondKey}-${nodeId}-${componentId}`);
-    } else {
-      component[propertyName]["value"] = value;
-      sendKey(`${propertyName}-${nodeId}-${componentId}`);
-    }
-    function sendMessageToContentScript(message, callback) {
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
-          if (callback) callback(response);
-        });
+  const sendMessageToContentScript = function (message, callback) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
+        if (callback) callback(response);
       });
-    }
-    function sendKey(key) {
-      sendMessageToContentScript(
-        {
-          cmd: "test",
-          //   key: `${propertyName}-${nodeId}-${componentId}`,
-          key: key,
-          value: value,
-        },
-        function (response) {
-          console.log("来自content回复：" + response);
-        }
+    });
+  };
+  const sendKeyAndValue = function (key, value) {
+    sendMessageToContentScript(
+      {
+        cmd: "test",
+        key: key,
+        value: value,
+      },
+      function (response) {
+        console.log("来自content回复：" + response);
+      }
+    );
+  };
+  const handleChange = function (inputValue, propertyName, secondKey = null) {
+    // 此处添加setValue数值更改更丝滑
+    setValue(inputValue);
+
+    if (secondKey) {
+      component[propertyName]["value"][secondKey] = inputValue;
+      sendKeyAndValue(
+        `${propertyName}.${secondKey}-${nodeId}-${componentId}`,
+        inputValue
       );
+    } else {
+      component[propertyName]["value"] = inputValue;
+      sendKeyAndValue(`${propertyName}-${nodeId}-${componentId}`, inputValue);
     }
   };
+  const handleBooleanChange = function (inputValue, propertyName) {
+    setValue(inputValue);
+    component[propertyName]["value"] = inputValue;
+    sendKeyAndValue(`${propertyName}-${nodeId}-${componentId}`, inputValue);
+  };
   return (
-    // <div>{
-    //   console.log(comopentProperties)
-    // }</div>
     <Card key={`${nodeId}-${componentId}`} title={component["name"]}>
       {comopentProperties
         .filter((propertyName) => propertyName !== "name")
@@ -55,21 +60,15 @@ export default function TypeTable(props) {
               className="key"
             >{`${propertyName}`}</span>
             <span className="propertyInput" key={propertyName + "input"}>
-              {/* <InputType
-                keyProp={`${propertyName}-${nodeId}-${componentId}`}
-                type={component[propertyName].type}
-                value={`${component[propertyName].value}`}
-                onChange={(value) => handleChange(value, propertyName)}
-              /> */}
               {component[propertyName].type === "vector2" ? (
                 <>
                   <span className="propertyX">x: </span>
                   <InputNumber
                     key={`${propertyName}.x-${nodeId}-${componentId}`}
-                    defaultValue={`${component[propertyName].value.y}`}
+                    defaultValue={`${component[propertyName].value.x}`}
                     value={component[propertyName].value.x}
                     onChange={(value) => handleChange(value, propertyName, "x")}
-                    step = {component[propertyName]?.step}
+                    step={component[propertyName]?.step}
                   />
                   <span className="propertyY">y: </span>
                   <InputNumber
@@ -77,7 +76,7 @@ export default function TypeTable(props) {
                     defaultValue={`${component[propertyName].value.y}`}
                     value={component[propertyName].value.y}
                     onChange={(value) => handleChange(value, propertyName, "y")}
-                    step = {component[propertyName]?.step}
+                    step={component[propertyName]?.step}
                   />
                 </>
               ) : component[propertyName].type === "number" ? (
@@ -86,15 +85,13 @@ export default function TypeTable(props) {
                   defaultValue={`${component[propertyName].value}`}
                   value={component[propertyName].value}
                   onChange={(value) => handleChange(value, propertyName)}
-                  step = {component[propertyName]?.step}
+                  step={component[propertyName]?.step}
                 />
               ) : component[propertyName].type === "boolean" ? (
                 <Switch
                   defaultChecked
                   key={`${propertyName}-${nodeId}-${componentId}`}
-                  //   defaultValue={`${component[propertyName].value}`}
-                  //   value={component[propertyName].value}
-                  onChange={(value) => handleChange(value, propertyName)}
+                  onChange={(value) => handleBooleanChange(value, propertyName)}
                 />
               ) : component[propertyName].type === "size" ? (
                 <>
@@ -103,16 +100,20 @@ export default function TypeTable(props) {
                     key={`${propertyName}.width-${nodeId}-${componentId}`}
                     defaultValue={`${component[propertyName].value.width}`}
                     value={component[propertyName].value.width}
-                    onChange={(value) => handleChange(value, propertyName, "width")}
-                    step = {component[propertyName]?.step}
+                    onChange={(value) =>
+                      handleChange(value, propertyName, "width")
+                    }
+                    step={component[propertyName]?.step}
                   />
-                  <span className="propertyY">height:{" "}</span>
+                  <span className="propertyY">height: </span>
                   <InputNumber
                     key={`${propertyName}.height-${nodeId}-${componentId}`}
                     defaultValue={`${component[propertyName].value.height}`}
                     value={component[propertyName].value.height}
-                    onChange={(value) => handleChange(value, propertyName, "height")}
-                    step = {component[propertyName]?.step}
+                    onChange={(value) =>
+                      handleChange(value, propertyName, "height")
+                    }
+                    step={component[propertyName]?.step}
                   />
                 </>
               ) : (
