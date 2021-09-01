@@ -1,9 +1,7 @@
 import React, { createContext, useReducer } from "react";
 
-//context
 export const CategoryDataContext = createContext({});
 
-// 相当于之前的 constants
 export const CHANGE_NODE_ID = "changeNodeId";
 export const INIT_DEVTOOL = "initDevTool";
 export const SET_COMPONENTS = "setComponents";
@@ -24,11 +22,6 @@ const reducer = (state, action) => {
         componentsKeepType: action.data.initComponents,
         nodes: action.data.nodes,
         gData: action.data.gData,
-      };
-    case SET_COMPONENTS:
-      return {
-        ...state,
-        components: action.data.components,
       };
     case SET_NODES:
       return {

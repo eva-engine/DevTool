@@ -9,14 +9,30 @@ const globalHook = {
     chrome.runtime.sendMessage(
       { sign: sign, [name]: value },
       function (response) {
-        console.log(response.farewell);
+        // console.log(response.farewell);
       }
     );
   },
 };
+
 function setInspectorEev(window) {
   window.__EVA_INSPECTOR_ENV__ = true;
+
+  // when eva change window.__EVA_GAME_INSTANCE__, dispatch event "getGame"
+  let _game;
+  Object.defineProperty(window, "__EVA_GAME_INSTANCE__", {
+    set(game) {
+      _game = game;
+      const e = document.createEvent("MessageEvent");
+      e.initEvent("getGame");
+      document.dispatchEvent(e);
+    },
+    get(){
+      return _game;
+    }
+  });
 }
+
 globalHook.executeInContext(setInspectorEev.toString());
 
 document.addEventListener("getGame", function () {
@@ -141,9 +157,7 @@ document.addEventListener("getGame", function () {
       },
       initEvaInstanceInfo() {
         const evaGameObjects = window.__EVA_GAME_INSTANCE__.gameObjects;
-        // console.log('gameObjects',evaGameObjects);
         const result = util.transformToNodes(evaGameObjects);
-        console.log("result", result);
         window.postMessage({ result: result }, "*");
       },
     };
@@ -169,28 +183,30 @@ document.addEventListener("getGame", function () {
   }
   const code = injectedScript.toString();
   globalHook.executeInContext(code);
+
+
+  window.addEventListener(
+    "message",
+    function (event) {
+      const result = event.data.result;
+      if (result) {
+        globalHook.sendMessageToPanelJS("EvaDevtool", "tree", result);
+      }
+      const nodes = event.data.nodes;
+      if (nodes) {
+        globalHook.sendMessageToPanelJS("Nodes", "nodes", nodes);
+      }
+      const instance = event.data.instance;
+      if (instance) {
+        globalHook.sendMessageToPanelJS("Instance", "instance", instance);
+      }
+    },
+    false
+  );
+  chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    if (request.cmd == "test") {
+      window.postMessage({ key: request.key, value: request.value });
+    }
+  });
 });
-window.addEventListener(
-  "message",
-  function (event) {
-    const result = event.data.result;
-    if (result) {
-      globalHook.sendMessageToPanelJS("EvaDevtool", "tree", result);
-    }
-    const nodes = event.data.nodes;
-    if (nodes) {
-      globalHook.sendMessageToPanelJS("Nodes", "nodes", nodes);
-    }
-    const instance = event.data.instance;
-    if (instance) {
-      globalHook.sendMessageToPanelJS("Instance", "instance", instance);
-    }
-  },
-  false
-);
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.cmd == "test") {
-    window.postMessage({ key: request.key, value: request.value });
-  }
-  sendResponse("hhh");
-});
+
