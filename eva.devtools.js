@@ -8,12 +8,3 @@ chrome.devtools.panels.create(
     console.log("自定义面板创建成功！"); // 注意这个log一般看不到
   }
 );
-// document.addEventListener("DOMContentLoaded", function () {
-//   console.log("tabId", chrome.devtools.inspectedWindow.tabId);
-// });
-
-// function receiveMessage(event) {
-//   console.log("devtools msg: ", event);
-// }
-
-// window.addEventListener("message", receiveMessage, false);
