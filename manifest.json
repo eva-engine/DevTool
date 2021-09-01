@@ -8,9 +8,6 @@
   "page_action": {
     "default_title": "EvaJS Inspector"
   },
-  "background": {
-    "scripts": ["eva.background.js"]
-  },
   "content_security_policy": "script-src 'self'; object-src 'self'",
   "content_scripts": [
     {
