@@ -206,6 +206,7 @@ document.addEventListener("getGame", function () {
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.cmd == "test") {
       window.postMessage({ key: request.key, value: request.value });
+      sendResponse({fareware:'content receive'})
     }
   });
 });

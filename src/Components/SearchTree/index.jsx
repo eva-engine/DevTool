@@ -59,6 +59,7 @@ export default function SearchTree() {
             nodes: request.instance.nodes,
           },
         });
+        sendResponse({farewell:'instance'})
       }
     });
     return () => {};
