@@ -4,9 +4,10 @@ import "./index.css";
 
 export default function TypeTable(props) {
   const comopentProperties = Object.keys(props.component);
-  const component = props.component;
-  const componentId = props.componentId;
-  const nodeId = props.nodeId;
+  // const component = props.component;
+  // const componentId = props.componentId;
+  // const nodeId = props.nodeId;
+  const { component, componentId, nodeId } = props;
   const [value, setValue] = useState(0);
 
   const sendMessageToContentScript = function (message, callback) {
@@ -47,6 +48,7 @@ export default function TypeTable(props) {
   };
 
   const handleBooleanChange = function (inputValue, propertyName) {
+    console.log(inputValue, propertyName);
     setValue(inputValue);
     component[propertyName]["value"] = inputValue;
     sendKeyAndValue(`${propertyName}-${nodeId}-${componentId}`, inputValue);
@@ -73,6 +75,17 @@ export default function TypeTable(props) {
   };
 
   const buildInputByType = function (type, propertyName) {
+    if (type.length > 10) {
+      const style = component[`style`];
+      let styleKeys;
+      style? styleKeys=Object.keys(style.value).map(key=>(<div>{`${key}: `}<InputNumber {...buildInputItemByType(propertyName, `${key}`)} /></div>)):null;
+      return (
+        <>
+        <br/>
+          {styleKeys}
+        </>
+      );
+    }
     return type === "vector2" ? (
       <>
         <span className="propertyX">x: </span>
@@ -91,7 +104,6 @@ export default function TypeTable(props) {
     ) : type === "size" ? (
       <>
         <span className="propertyX">width: </span>
-        <InputNumber {...buildInputItemByType(propertyName, "width")} />
         <span className="propertyY">height: </span>
         <InputNumber {...buildInputItemByType(propertyName, "height")} />
       </>
