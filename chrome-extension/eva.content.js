@@ -115,7 +115,7 @@ document.addEventListener("getGame", function () {
         const componentKey = keys[0];
         const objId = keys[1] - 1;
         const componentId = keys[2];
-        if (componentKey.inclues(".")) {
+        if (componentKey.includes(".")) {
           let firstAndSecondKey = componentKey.split(".");
           const firstKey = firstAndSecondKey[0];
           const secondKey = firstAndSecondKey[1];
